@@ -1,0 +1,23 @@
+{
+  "@context" : "http://purl.imsglobal.org/ctx/lti/v1/ContentItem",
+  "@graph" : [
+        { "@type" : "ContentItem",
+            "@id" : "{{id}}",
+            "url" : "{{{url}}}",
+            "title": "{{title}}",
+{{#icon}}
+            "icon" : {
+                "@id" : "{{{icon}}}",
+                "width" : 45,
+                "height" : 45
+            },
+{{/icon}}
+            "text" : "{{text}}",
+            "mediaType" : "text/html",
+            "placementAdvice" : {
+                "presentationDocumentTarget" : "window",
+                "windowTarget" : "anLTIApp"
+            }
+        }
+    ]
+}

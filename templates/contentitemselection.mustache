@@ -1,0 +1,19 @@
+<form method="post" action="{{content_item_return_url}}" encType="application/x-www-form-urlencoded" id="content_item_selection">
+    <input type="hidden" name="content_items" value='{{{content_items}}}'/>
+    {{#data}}
+        <input type="hidden" name="data" value="{{ data }}"/>
+    {{/data}}
+    <input type="hidden" name="oauth_nonce" value="{{oauth_nonce}}" />
+    <input type="hidden" name="oauth_version" value="1.0" />
+    <input type="hidden" name="oauth_timestamp" value="{{oauth_timestamp}}" />
+    <input type="hidden" name="oauth_callback" value="{{oauth_callback}}" />
+    <input type="hidden" name="oauth_consumer_key" value="{{oauth_consumer_key}}" />
+    <input type="hidden" name="lti_version" value="{{lti_version}}"/>
+    <input type="hidden" name="lti_message_type" value="{{lti_message_type}}"/>
+    <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
+    <input type="hidden" name="oauth_signature" value="{{oauth_signature}}" />
+</form>
+
+<script>
+    document.getElementById('content_item_selection').submit();
+</script>

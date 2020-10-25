@@ -7,9 +7,10 @@
 {{#js}}
 
 require(['jquery'], function($) {
-    $('.poodllprovider-item').click(function(){
-        var formid = $(this).data('formid);
+    $('.poodllprovider-item-link').click(function(){
+        var formid = $(this).data('formid');
         document.getElementById(formid).submit();
+        return false;
     });
 }); //end of script
 

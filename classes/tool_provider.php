@@ -222,6 +222,7 @@ class tool_provider extends ToolProvider {
             //these are not needed in calc of signature so add these later
             $fdata['content_item_return_url'] = $this->returnUrl;
             $fdata['lti_message_type'] = 'ContentItemSelection';
+            $fdata['itemnumber']=$thetool->id;
             $fdata = (object) $fdata;
             $formdataitems[]=$fdata;
             //$fcontent = $OUTPUT->render_from_template('enrol_poodllprovider/contentitemselectable', $fdata);

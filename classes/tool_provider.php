@@ -185,39 +185,50 @@ class tool_provider extends ToolProvider {
         global $OUTPUT, $CFG,$COURSE;
 
         //$tools = helper::get_lti_tools(array("courseid"=>$COURSE->id));
+        $formdataitems = array();
         $tools = helper::get_lti_tools();
-        $thetool= array_pop($tools);
+        //$thetool = array_pop($tools);
+        foreach($tools as $thetool) {
 
-        $tdata=new \stdClass();
-        $tdata->title = $thetool->name;
-        $tdata->name = $thetool->name;
-        $tdata->text = $thetool->name;
-        $tdata->url = helper::get_launch_url($thetool->id);
-        //$tdata->icon='';
-        $raw_contentitems = $OUTPUT->render_from_template('enrol_poodllprovider/contentitems', $tdata);
-        $jci = json_decode($raw_contentitems);
-        $contentitems = json_encode($jci);
+            //first get the content_items Json that LTI expects
+            //this is the payload that when the user selects from list of items is returned as the selected activity
+            //so we only return one. We could return multiple, but we have no need for this and consumer may not support it.
+            $tdata = new \stdClass();
+            $tdata->title = $thetool->name;
+            $tdata->name = $thetool->name;
+            $tdata->text = $thetool->name;
+            $tdata->url = helper::get_launch_url($thetool->id);
+            //$tdata->icon='';
+            $raw_contentitems = $OUTPUT->render_from_template('enrol_poodllprovider/contentitem', $tdata);
+            $jci = json_decode($raw_contentitems);
+            $contentitems = json_encode($jci);
 
-        $errorUrl = $this->returnUrl;
-        $fdata = array();
-        $fdata['content_items']=$contentitems;
+            //now we collect the data, including signature that makes the form. One for each selectable item/activity
+            $errorUrl = $this->returnUrl;
+            $fdata = array();
+            $fdata['content_items'] = $contentitems;
 
-        if (!is_null($this->consumer) && isset($_POST['lti_message_type']) && ($_POST['lti_message_type'] === 'ContentItemSelectionRequest')) {
+            if (!is_null($this->consumer) && isset($_POST['lti_message_type']) &&
+                    ($_POST['lti_message_type'] === 'ContentItemSelectionRequest')) {
 
-            if (isset($_POST['data'])) {
-                $fdata['data'] = $_POST['data'];
+                if (isset($_POST['data'])) {
+                    $fdata['data'] = $_POST['data'];
+                }
+                $version = (isset($_POST['lti_version'])) ? $_POST['lti_version'] : self::LTI_VERSION1;
+                //$fdata = $this->consumer->signParameters($errorUrl, 'ContentItemSelection', $version, $fdata);
+                $fdata = $this->sign_parameters($errorUrl, 'ContentItemSelection', $version, $fdata);
             }
-            $version = (isset($_POST['lti_version'])) ? $_POST['lti_version'] : self::LTI_VERSION1;
-            //$fdata = $this->consumer->signParameters($errorUrl, 'ContentItemSelection', $version, $fdata);
-            $fdata = $this->sign_parameters($errorUrl, 'ContentItemSelection', $version, $fdata);
+
+            //these are not needed in calc of signature so add these later
+            $fdata['content_item_return_url'] = $this->returnUrl;
+            $fdata['lti_message_type'] = 'ContentItemSelection';
+            $fdata = (object) $fdata;
+            $formdataitems[]=$fdata;
+            //$fcontent = $OUTPUT->render_from_template('enrol_poodllprovider/contentitemselectable', $fdata);
         }
-
-
-        //these are not needed in calc of signature so add these later
-        $fdata['content_item_return_url']=$this->returnUrl;
-        $fdata['lti_message_type']='ContentItemSelection';
-        $fdata = (object)$fdata;
-        $fcontent = $OUTPUT->render_from_template('enrol_poodllprovider/contentitemselection', $fdata);
+        $contentitemsdata = new \stdClass();
+        $contentitemsdata->formdataitems = $formdataitems;
+        $fcontent = $OUTPUT->render_from_template('enrol_poodllprovider/contentitemspage', $contentitemsdata);
         echo $fcontent;
         return;
     }

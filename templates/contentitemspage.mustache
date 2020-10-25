@@ -1,0 +1,18 @@
+{{#formdataitems}}
+{{> contentitemform}}
+{{/formdataitems}}
+
+
+<!-- Custom JS from template  goes goes here  -->
+{{#js}}
+
+require(['jquery'], function($) {
+    $('.poodllprovider-item').click(function(){
+        var formid = $(this).data('formid);
+        document.getElementById(formid).submit();
+    });
+}); //end of script
+
+
+
+{{/js}}

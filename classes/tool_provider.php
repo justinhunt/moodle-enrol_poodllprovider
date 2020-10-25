@@ -194,7 +194,7 @@ class tool_provider extends ToolProvider {
         $tdata->text = $thetool->name;
         $tdata->url = helper::get_launch_url($thetool->id);
         //$tdata->icon='';
-        $raw_contentitems = $OUTPUT->render_from_template('enrol_lti/contentitems', $tdata);
+        $raw_contentitems = $OUTPUT->render_from_template('enrol_poodllprovider/contentitems', $tdata);
         $jci = json_decode($raw_contentitems);
         $contentitems = json_encode($jci);
 
@@ -219,7 +219,7 @@ class tool_provider extends ToolProvider {
         $fdata['content_item_return_url']=$this->returnUrl;
         $fdata['lti_message_type']='ContentItemSelection';
         $fdata = (object)$fdata;
-        $fcontent = $OUTPUT->render_from_template('enrol_lti/contentitemselection', $fdata);
+        $fcontent = $OUTPUT->render_from_template('enrol_poodllprovider/contentitemselection', $fdata);
         echo $fcontent;
         return;
     }

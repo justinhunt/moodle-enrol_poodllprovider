@@ -79,7 +79,7 @@ class sync_grades extends \core\task\scheduled_task {
                 $sendcount = 0;
 
                 // We check for all the users - users can access the same tool from different consumers.
-                if ($ltiusers = $DB->get_records('enrol_poodllprovider_users', array('toolid' => $tool->id), 'lastaccess DESC')) {
+                if ($ltiusers = $DB->get_records('enrol_pp_users', array('toolid' => $tool->id), 'lastaccess DESC')) {
                     $completion = new \completion_info(get_course($tool->courseid));
                     foreach ($ltiusers as $ltiuser) {
                         $mtracecontent = "for the user '$ltiuser->userid' in the tool '$tool->id' for the course " .
@@ -174,7 +174,7 @@ class sync_grades extends \core\task\scheduled_task {
                         }
 
                         if (strpos(strtolower($response), 'success') !== false) {
-                            $DB->set_field('enrol_poodllprovider_users', 'lastgrade', grade_floatval($grade), array('id' => $ltiuser->id));
+                            $DB->set_field('enrol_pp_users', 'lastgrade', grade_floatval($grade), array('id' => $ltiuser->id));
                             mtrace("Success - The grade '$floatgrade' $mtracecontent was sent.");
                             $sendcount = $sendcount + 1;
                         } else {

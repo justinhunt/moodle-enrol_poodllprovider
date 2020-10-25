@@ -277,15 +277,15 @@ class sync_members extends scheduled_task {
                     $enrolcount++;
                 }
 
-                // Check if this user has already been registered in the enrol_poodllprovider_users table.
-                if (!$DB->record_exists('enrol_poodllprovider_users', ['toolid' => $tool->id, 'userid' => $user->id])) {
-                    // Create an initial enrol_poodllprovider_user record that we can use later when syncing grades and members.
+                // Check if this user has already been registered in the enrol_pp_users table.
+                if (!$DB->record_exists('enrol_pp_users', ['toolid' => $tool->id, 'userid' => $user->id])) {
+                    // Create an initial enrol_pp_user record that we can use later when syncing grades and members.
                     $userlog = new stdClass();
                     $userlog->userid = $user->id;
                     $userlog->toolid = $tool->id;
                     $userlog->consumerkey = $consumer->getKey();
 
-                    $DB->insert_record('enrol_poodllprovider_users', $userlog);
+                    $DB->insert_record('enrol_pp_users', $userlog);
                 }
             }
         }
@@ -314,7 +314,7 @@ class sync_members extends scheduled_task {
 
         $unenrolcount = 0;
 
-        $ltiusersrs = $DB->get_recordset('enrol_poodllprovider_users', array('toolid' => $tool->id), 'lastaccess DESC', 'userid');
+        $ltiusersrs = $DB->get_recordset('enrol_pp_users', array('toolid' => $tool->id), 'lastaccess DESC', 'userid');
         // Go through the users and check if any were never listed, if so, remove them.
         foreach ($ltiusersrs as $ltiuser) {
             if (!in_array($ltiuser->userid, $this->currentusers)) {

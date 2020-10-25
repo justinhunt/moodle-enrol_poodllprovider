@@ -107,7 +107,7 @@ class enrol_poodllprovider_privacy_provider_testcase extends \core_privacy\tests
         $writer = \core_privacy\local\request\writer::with_context($coursecontext);
         $this->assertTrue($writer->has_any_data());
 
-        $data = (array) $writer->get_data(['enrol_poodllprovider_users']);
+        $data = (array) $writer->get_data(['enrol_pp_users']);
         $this->assertCount(2, $data);
         foreach ($data as $ltiuser) {
             $this->assertArrayHasKey('lastgrade', $ltiuser);
@@ -120,7 +120,7 @@ class enrol_poodllprovider_privacy_provider_testcase extends \core_privacy\tests
         $writer = \core_privacy\local\request\writer::with_context($cmcontext);
         $this->assertTrue($writer->has_any_data());
 
-        $data = (array) $writer->get_data(['enrol_poodllprovider_users']);
+        $data = (array) $writer->get_data(['enrol_pp_users']);
         $this->assertCount(1, $data);
         foreach ($data as $ltiuser) {
             $this->assertArrayHasKey('lastgrade', $ltiuser);
@@ -135,14 +135,14 @@ class enrol_poodllprovider_privacy_provider_testcase extends \core_privacy\tests
     public function test_delete_data_for_all_users_in_context() {
         global $DB;
 
-        $count = $DB->count_records('enrol_poodllprovider_users');
+        $count = $DB->count_records('enrol_pp_users');
         $this->assertEquals(4, $count);
 
         // Delete data based on context.
         $coursecontext = context_course::instance($this->course->id);
         provider::delete_data_for_all_users_in_context($coursecontext);
 
-        $ltiusers = $DB->get_records('enrol_poodllprovider_users');
+        $ltiusers = $DB->get_records('enrol_pp_users');
         $this->assertCount(1, $ltiusers);
 
         $ltiuser = reset($ltiusers);
@@ -158,14 +158,14 @@ class enrol_poodllprovider_privacy_provider_testcase extends \core_privacy\tests
         $cmcontext = context_module::instance($this->activity->cmid);
         $coursecontext = context_course::instance($this->course->id);
 
-        $count = $DB->count_records('enrol_poodllprovider_users');
+        $count = $DB->count_records('enrol_pp_users');
         $this->assertEquals(4, $count);
 
         $contextlist = new \core_privacy\local\request\approved_contextlist($this->user, 'enrol_poodllprovider',
             [context_system::instance()->id, $coursecontext->id, $cmcontext->id]);
         provider::delete_data_for_user($contextlist);
 
-        $ltiusers = $DB->get_records('enrol_poodllprovider_users');
+        $ltiusers = $DB->get_records('enrol_pp_users');
         $this->assertCount(1, $ltiusers);
 
         $ltiuser = reset($ltiusers);
@@ -190,7 +190,7 @@ class enrol_poodllprovider_privacy_provider_testcase extends \core_privacy\tests
             'timecreated' => time(),
             'timemodified' => time() + DAYSECS
         ];
-        $toolid = $DB->insert_record('enrol_poodllprovider_tools', $ltitool);
+        $toolid = $DB->insert_record('enrol_pp_tools', $ltitool);
 
         // Create a user.
         $ltiuser = (object) [
@@ -200,7 +200,7 @@ class enrol_poodllprovider_privacy_provider_testcase extends \core_privacy\tests
             'lastaccess' => time() + DAYSECS,
             'timecreated' => time()
         ];
-        $DB->insert_record('enrol_poodllprovider_users', $ltiuser);
+        $DB->insert_record('enrol_pp_users', $ltiuser);
     }
 
     /**
@@ -238,20 +238,20 @@ class enrol_poodllprovider_privacy_provider_testcase extends \core_privacy\tests
 
         $coursecontext = context_course::instance($this->course->id);
 
-        $count = $DB->count_records('enrol_poodllprovider_users');
+        $count = $DB->count_records('enrol_pp_users');
         $this->assertEquals(4, $count);
 
         $approveduserlist = new \core_privacy\local\request\approved_userlist($coursecontext, 'enrol_paypal',
                 [$this->user->id]);
         provider::delete_data_for_users($approveduserlist);
 
-        $ltiusers = $DB->get_records('enrol_poodllprovider_users');
+        $ltiusers = $DB->get_records('enrol_pp_users');
         $this->assertCount(2, $ltiusers);
 
         foreach ($ltiusers as $ltiuser) {
             $leftover = false;
             if ($ltiuser->userid == $this->user->id) {
-                $contextid = $DB->get_field('enrol_poodllprovider_tools', 'contextid', ['id' => $ltiuser->toolid]);
+                $contextid = $DB->get_field('enrol_pp_tools', 'contextid', ['id' => $ltiuser->toolid]);
                 if ($contextid == $coursecontext->id) {
                     $leftover = true;
                 }
@@ -268,20 +268,20 @@ class enrol_poodllprovider_privacy_provider_testcase extends \core_privacy\tests
 
         $cmcontext = context_module::instance($this->activity->cmid);
 
-        $count = $DB->count_records('enrol_poodllprovider_users');
+        $count = $DB->count_records('enrol_pp_users');
         $this->assertEquals(4, $count);
 
         $approveduserlist = new \core_privacy\local\request\approved_userlist($cmcontext, 'enrol_paypal',
                 [$this->user->id]);
         provider::delete_data_for_users($approveduserlist);
 
-        $ltiusers = $DB->get_records('enrol_poodllprovider_users');
+        $ltiusers = $DB->get_records('enrol_pp_users');
         $this->assertCount(3, $ltiusers);
 
         foreach ($ltiusers as $ltiuser) {
             $leftover = false;
             if ($ltiuser->userid == $this->user->id) {
-                $contextid = $DB->get_field('enrol_poodllprovider_tools', 'contextid', ['id' => $ltiuser->toolid]);
+                $contextid = $DB->get_field('enrol_pp_tools', 'contextid', ['id' => $ltiuser->toolid]);
                 if ($contextid == $cmcontext->id) {
                     $leftover = true;
                 }

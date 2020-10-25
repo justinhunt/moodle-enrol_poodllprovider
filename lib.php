@@ -109,7 +109,7 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
             $data->$field = $value;
         }
 
-        $DB->insert_record('enrol_poodllprovider_tools', $data);
+        $DB->insert_record('enrol_pp_tools', $data);
 
         return $instanceid;
     }
@@ -142,7 +142,7 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
             $tool->$field = $value;
         }
 
-        return $DB->update_record('enrol_poodllprovider_tools', $tool);
+        return $DB->update_record('enrol_pp_tools', $tool);
     }
 
     /**
@@ -155,13 +155,13 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         global $DB;
 
         // Get the tool associated with this instance.
-        $tool = $DB->get_record('enrol_poodllprovider_tools', array('enrolid' => $instance->id), 'id', MUST_EXIST);
+        $tool = $DB->get_record('enrol_pp_tools', array('enrolid' => $instance->id), 'id', MUST_EXIST);
 
         // Delete any users associated with this tool.
-        $DB->delete_records('enrol_poodllprovider_users', array('toolid' => $tool->id));
+        $DB->delete_records('enrol_pp_users', array('toolid' => $tool->id));
 
         // Get tool and consumer mappings.
-        $rsmapping = $DB->get_recordset('enrol_poodllprovider_tool_consumer_map', array('toolid' => $tool->id));
+        $rsmapping = $DB->get_recordset('enrol_pp_tool_consumer_map', array('toolid' => $tool->id));
 
         // Delete consumers that are linked to this tool and their related data.
         $dataconnector = new data_connector();
@@ -173,10 +173,10 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         $rsmapping->close();
 
         // Delete mapping records.
-        $DB->delete_records('enrol_poodllprovider_tool_consumer_map', array('toolid' => $tool->id));
+        $DB->delete_records('enrol_pp_tool_consumer_map', array('toolid' => $tool->id));
 
         // Delete the poodllprovider tool record.
-        $DB->delete_records('enrol_poodllprovider_tools', array('id' => $tool->id));
+        $DB->delete_records('enrol_pp_tools', array('id' => $tool->id));
 
         // Time for the parent to do it's thang, yeow.
         parent::delete_instance($instance);
@@ -193,10 +193,10 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         global $DB;
 
         // Get the tool associated with this instance. Note - it may not exist if we have deleted
-        // the tool. This is fine because we have already cleaned the 'enrol_poodllprovider_users' table.
-        if ($tool = $DB->get_record('enrol_poodllprovider_tools', array('enrolid' => $instance->id), 'id')) {
+        // the tool. This is fine because we have already cleaned the 'enrol_pp_users' table.
+        if ($tool = $DB->get_record('enrol_pp_tools', array('enrolid' => $instance->id), 'id')) {
             // Need to remove the user from the users table.
-            $DB->delete_records('enrol_poodllprovider_users', array('userid' => $userid, 'toolid' => $tool->id));
+            $DB->delete_records('enrol_pp_users', array('userid' => $userid, 'toolid' => $tool->id));
         }
 
         parent::unenrol_user($instance, $userid);
@@ -330,8 +330,8 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
 
         // Check if we are editing an instance.
         if (!empty($instance->id)) {
-            // Get the details from the enrol_poodllprovider_tools table.
-            $ltitool = $DB->get_record('enrol_poodllprovider_tools', array('enrolid' => $instance->id), '*', MUST_EXIST);
+            // Get the details from the enrol_pp_tools table.
+            $ltitool = $DB->get_record('enrol_pp_tools', array('enrolid' => $instance->id), '*', MUST_EXIST);
 
             $mform->addElement('hidden', 'toolid');
             $mform->setType('toolid', PARAM_INT);
@@ -387,7 +387,7 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
      * @param int $oldid
      */
     public function restore_instance(restore_enrolments_structure_step $step, stdClass $data, $course, $oldid) {
-        // We want to call the parent because we do not want to add an enrol_poodllprovider_tools row
+        // We want to call the parent because we do not want to add an enrol_pp_tools row
         // as that is done as part of the restore process.
         $instanceid = parent::add_instance($course, (array)$data);
         $step->set_mapping('enrol', $oldid, $instanceid);

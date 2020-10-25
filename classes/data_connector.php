@@ -66,7 +66,7 @@ class data_connector extends DataConnector {
      * data_connector constructor.
      */
     public function __construct() {
-        parent::__construct(null, 'enrol_poodllprovider_');
+        parent::__construct(null, 'enrol_pp_');
 
         // Set up table names.
         $this->consumertable = $this->dbTableNamePrefix . DataConnector::CONSUMER_TABLE_NAME;
@@ -974,7 +974,7 @@ class data_connector extends DataConnector {
         global $DB;
 
         $consumers = [];
-        $consumerrecords = $DB->get_records('enrol_poodllprovider_tool_consumer_map', ['toolid' => $toolid], '', 'consumerid');
+        $consumerrecords = $DB->get_records('enrol_pp_tool_consumer_map', ['toolid' => $toolid], '', 'consumerid');
         foreach ($consumerrecords as $record) {
             $consumers[] = ToolConsumer::fromRecordId($record->consumerid, $this);
         }

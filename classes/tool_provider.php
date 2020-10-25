@@ -440,7 +440,7 @@ class tool_provider extends ToolProvider {
         $serviceurl = $this->resourceLink->getSetting('lis_outcome_service_url');
 
         // Check if we have recorded this user before.
-        if ($userlog = $DB->get_record('enrol_poodllprovider_users', ['toolid' => $tool->id, 'userid' => $user->id])) {
+        if ($userlog = $DB->get_record('enrol_pp_users', ['toolid' => $tool->id, 'userid' => $user->id])) {
             if ($userlog->sourceid != $sourceid) {
                 $userlog->sourceid = $sourceid;
             }
@@ -448,7 +448,7 @@ class tool_provider extends ToolProvider {
                 $userlog->serviceurl = $serviceurl;
             }
             $userlog->lastaccess = time();
-            $DB->update_record('enrol_poodllprovider_users', $userlog);
+            $DB->update_record('enrol_pp_users', $userlog);
         } else {
             // Add the user details so we can use it later when syncing grades and members.
             $userlog = new stdClass();
@@ -464,7 +464,7 @@ class tool_provider extends ToolProvider {
             $userlog->membershipsurl = $this->resourceLink->getSetting('ext_ims_lis_memberships_url');
             $userlog->membershipsid = $this->resourceLink->getSetting('ext_ims_lis_memberships_id');
 
-            $DB->insert_record('enrol_poodllprovider_users', $userlog);
+            $DB->insert_record('enrol_pp_users', $userlog);
         }
 
         // Finalise the user log in.
@@ -547,9 +547,9 @@ class tool_provider extends ToolProvider {
             'toolid' => $this->tool->id,
             'consumerid' => $this->consumer->getRecordId()
         ];
-        $mappingexists = $DB->record_exists('enrol_poodllprovider_tool_consumer_map', $mappingparams);
+        $mappingexists = $DB->record_exists('enrol_pp_tool_consumer_map', $mappingparams);
         if (!$mappingexists) {
-            $DB->insert_record('enrol_poodllprovider_tool_consumer_map', (object) $mappingparams);
+            $DB->insert_record('enrol_pp_tool_consumer_map', (object) $mappingparams);
         }
     }
 }

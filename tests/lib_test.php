@@ -96,10 +96,10 @@ class enrol_poodllprovider_testcase extends advanced_testcase {
         ];
 
         // Check first that the related records exist.
-        $this->assertTrue($DB->record_exists('enrol_poodllprovider_tool_consumer_map', $mappingparams));
-        $this->assertTrue($DB->record_exists('enrol_poodllprovider_lti2_consumer', [ 'id' => $consumer->getRecordId() ]));
-        $this->assertTrue($DB->record_exists('enrol_poodllprovider_lti2_resource_link', [ 'id' => $resourcelink->getRecordId() ]));
-        $this->assertTrue($DB->record_exists('enrol_poodllprovider_lti2_user_result', [ 'id' => $ltiuser->getRecordId() ]));
+        $this->assertTrue($DB->record_exists('enrol_pp_tool_consumer_map', $mappingparams));
+        $this->assertTrue($DB->record_exists('enrol_pp_lti2_consumer', [ 'id' => $consumer->getRecordId() ]));
+        $this->assertTrue($DB->record_exists('enrol_pp_lti2_resource_link', [ 'id' => $resourcelink->getRecordId() ]));
+        $this->assertTrue($DB->record_exists('enrol_pp_lti2_user_result', [ 'id' => $ltiuser->getRecordId() ]));
 
         // Perform deletion.
         $enrolpoodllprovider = new enrol_poodllprovider_plugin();
@@ -107,14 +107,14 @@ class enrol_poodllprovider_testcase extends advanced_testcase {
         $enrolpoodllprovider->delete_instance($instance);
 
         // Check that the related records have been deleted.
-        $this->assertFalse($DB->record_exists('enrol_poodllprovider_tool_consumer_map', $mappingparams));
-        $this->assertFalse($DB->record_exists('enrol_poodllprovider_lti2_consumer', [ 'id' => $consumer->getRecordId() ]));
-        $this->assertFalse($DB->record_exists('enrol_poodllprovider_lti2_resource_link', [ 'id' => $resourcelink->getRecordId() ]));
-        $this->assertFalse($DB->record_exists('enrol_poodllprovider_lti2_user_result', [ 'id' => $ltiuser->getRecordId() ]));
+        $this->assertFalse($DB->record_exists('enrol_pp_tool_consumer_map', $mappingparams));
+        $this->assertFalse($DB->record_exists('enrol_pp_lti2_consumer', [ 'id' => $consumer->getRecordId() ]));
+        $this->assertFalse($DB->record_exists('enrol_pp_lti2_resource_link', [ 'id' => $resourcelink->getRecordId() ]));
+        $this->assertFalse($DB->record_exists('enrol_pp_lti2_user_result', [ 'id' => $ltiuser->getRecordId() ]));
 
         // Check that the enrolled users and the tool instance has been deleted.
-        $this->assertFalse($DB->record_exists('enrol_poodllprovider_users', [ 'toolid' => $tool->id ]));
-        $this->assertFalse($DB->record_exists('enrol_poodllprovider_tools', [ 'id' => $tool->id ]));
+        $this->assertFalse($DB->record_exists('enrol_pp_users', [ 'toolid' => $tool->id ]));
+        $this->assertFalse($DB->record_exists('enrol_pp_tools', [ 'id' => $tool->id ]));
         $this->assertFalse($DB->record_exists('enrol', [ 'id' => $instance->id ]));
     }
 

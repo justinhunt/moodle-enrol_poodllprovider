@@ -46,8 +46,8 @@ class restore_enrol_poodllprovider_plugin extends restore_enrol_plugin {
     protected function define_enrol_plugin_structure() {
 
         $paths = array();
-        $paths[] = new restore_path_element('enrol_poodllprovider_tool', $this->connectionpoint->get_path() . '/tool');
-        $paths[] = new restore_path_element('enrol_poodllprovider_users', $this->connectionpoint->get_path() . '/tool/users/user');
+        $paths[] = new restore_path_element('enrol_pp_tool', $this->connectionpoint->get_path() . '/tool');
+        $paths[] = new restore_path_element('enrol_pp_users', $this->connectionpoint->get_path() . '/tool/users/user');
 
         return $paths;
     }
@@ -70,13 +70,13 @@ class restore_enrol_poodllprovider_plugin extends restore_enrol_plugin {
         $data->timemodified = $data->timecreated;
 
         // Now we can insert the new record.
-        $data->id = $DB->insert_record('enrol_poodllprovider_tools', $data);
+        $data->id = $DB->insert_record('enrol_pp_tools', $data);
 
         // Add the array of tools we need to process later.
         $this->tools[$data->id] = $data;
 
         // Set up the mapping.
-        $this->set_mapping('enrol_poodllprovider_tool', $oldid, $data->id);
+        $this->set_mapping('enrol_pp_tool', $oldid, $data->id);
     }
 
     /**
@@ -90,10 +90,10 @@ class restore_enrol_poodllprovider_plugin extends restore_enrol_plugin {
         $data = (object) $data;
 
         $data->userid = $this->get_mappingid('user', $data->userid);
-        $data->toolid = $this->get_mappingid('enrol_poodllprovider_tool', $data->toolid);
+        $data->toolid = $this->get_mappingid('enrol_pp_tool', $data->toolid);
         $data->timecreated = time();
 
-        $DB->insert_record('enrol_poodllprovider_users', $data);
+        $DB->insert_record('enrol_pp_users', $data);
     }
 
     /**
@@ -109,7 +109,7 @@ class restore_enrol_poodllprovider_plugin extends restore_enrol_plugin {
             $updatetool->id = $tool->id;
             $updatetool->enrolid = $this->get_mappingid('enrol', $tool->enrolid);
             $updatetool->contextid = $this->get_mappingid('context', $tool->contextid);
-            $DB->update_record('enrol_poodllprovider_tools', $updatetool);
+            $DB->update_record('enrol_pp_tools', $updatetool);
         }
     }
 }

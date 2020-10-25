@@ -60,12 +60,12 @@ class backup_enrol_poodllprovider_plugin extends backup_enrol_plugin {
         $users->add_child($user);
 
         // Set sources to populate the data.
-        $tool->set_source_table('enrol_poodllprovider_tools',
+        $tool->set_source_table('enrol_pp_tools',
             array('enrolid' => backup::VAR_PARENTID));
 
         // Users are only added only if users included.
         if ($this->task->get_setting_value('users')) {
-            $user->set_source_table('enrol_poodllprovider_users', array('toolid' => backup::VAR_PARENTID));
+            $user->set_source_table('enrol_pp_users', array('toolid' => backup::VAR_PARENTID));
         }
     }
 }

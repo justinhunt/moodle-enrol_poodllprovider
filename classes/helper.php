@@ -288,7 +288,7 @@ class helper {
         global $DB;
 
         $sql = "SELECT elt.*, e.name, e.courseid, e.status, e.enrolstartdate, e.enrolenddate, e.enrolperiod
-                  FROM {enrol_poodllprovider_tools} elt
+                  FROM {enrol_pp_tools} elt
                   JOIN {enrol} e
                     ON elt.enrolid = e.id
                  WHERE elt.id = :tid";
@@ -308,7 +308,7 @@ class helper {
         global $DB;
 
         $sql = "SELECT elt.*, e.name, e.courseid, e.status, e.enrolstartdate, e.enrolenddate, e.enrolperiod
-                  FROM {enrol_poodllprovider_tools} elt
+                  FROM {enrol_pp_tools} elt
                   JOIN {enrol} e
                     ON elt.enrolid = e.id";
         if ($params) {
@@ -333,7 +333,7 @@ class helper {
         global $DB;
 
         $sql = "SELECT COUNT(*)
-                  FROM {enrol_poodllprovider_tools} elt
+                  FROM {enrol_pp_tools} elt
                   JOIN {enrol} e
                     ON elt.enrolid = e.id";
         if ($params) {

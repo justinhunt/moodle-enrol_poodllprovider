@@ -270,7 +270,7 @@ class tool_provider_testcase extends advanced_testcase {
             'toolid' => $tool->id,
             'consumerid' => $tp->consumer->getRecordId()
         ];
-        $this->assertTrue($DB->record_exists('enrol_poodllprovider_tool_consumer_map', $mappingparams));
+        $this->assertTrue($DB->record_exists('enrol_pp_tool_consumer_map', $mappingparams));
     }
 
     /**
@@ -474,7 +474,7 @@ class tool_provider_testcase extends advanced_testcase {
         $mappingparams = [
             'toolid' => $tool->id
         ];
-        $this->assertFalse($DB->record_exists('enrol_poodllprovider_tool_consumer_map', $mappingparams));
+        $this->assertFalse($DB->record_exists('enrol_pp_tool_consumer_map', $mappingparams));
     }
 
     /**
@@ -508,7 +508,7 @@ class tool_provider_testcase extends advanced_testcase {
             'toolid' => $this->tool->id,
             'consumerid' => $tp->consumer->getRecordId()
         ];
-        $this->assertTrue($DB->record_exists('enrol_poodllprovider_tool_consumer_map', $mappingparams));
+        $this->assertTrue($DB->record_exists('enrol_pp_tool_consumer_map', $mappingparams));
     }
 
     /**

@@ -70,7 +70,7 @@ $toolprovider = new \enrol_poodllprovider\tool_provider($toolid);
 if ($ltiversion === \IMSGlobal\LTI\ToolProvider\ToolProvider::LTI_VERSION1) {
     $dataconnector = new \enrol_poodllprovider\data_connector();
     $consumer = new \IMSGlobal\LTI\ToolProvider\ToolConsumer($consumerkey, $dataconnector);
-    // Check if the consumer has already been registered to the enrol_poodllprovider_lti2_consumer table. Register if necessary.
+    // Check if the consumer has already been registered to the enrol_pp_lti2_consumer table. Register if necessary.
     $consumer->ltiVersion = \IMSGlobal\LTI\ToolProvider\ToolProvider::LTI_VERSION1;
     // For LTIv1, set the tool secret as the consumer secret.
     $consumer->secret = $tool->secret;

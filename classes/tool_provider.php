@@ -186,7 +186,7 @@ class tool_provider extends ToolProvider {
 
         //$tools = helper::get_lti_tools(array("courseid"=>$COURSE->id));
         $tools = helper::get_lti_tools();
-        $thetool= $tools[6];//array_pop($tools);
+        $thetool= array_pop($tools);
 
         $tdata=new \stdClass();
         $tdata->title = $thetool->name;
@@ -197,8 +197,6 @@ class tool_provider extends ToolProvider {
         $raw_contentitems = $OUTPUT->render_from_template('enrol_poodllprovider/contentitems', $tdata);
         $jci = json_decode($raw_contentitems);
         $contentitems = json_encode($jci);
-
-
 
         $errorUrl = $this->returnUrl;
         $fdata = array();

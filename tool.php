@@ -33,7 +33,7 @@ $PAGE->set_pagelayout('popup');
 $PAGE->set_title(get_string('opentool', 'enrol_poodllprovider'));
 
 // Get the tool.
-$tool = \enrol_poodllprovider\helper::get_poodllprovider_tool($toolid);
+$tool = \enrol_poodllprovider\helper::get_lti_tool($toolid);
 
 // Check if the authentication plugin is disabled.
 if (!is_enabled_auth('lti')) {

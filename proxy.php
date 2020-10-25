@@ -47,7 +47,7 @@ $PAGE->set_title(get_string('registration', 'enrol_poodllprovider'));
 if (!\enrol_poodllprovider\helper::verify_proxy_token($toolid, $token)) {
     throw new \moodle_exception('incorrecttoken', 'enrol_poodllprovider');
 }
-$tool = \enrol_poodllprovider\helper::get_poodllprovider_tool($toolid);
+$tool = \enrol_poodllprovider\helper::get_lti_tool($toolid);
 
 if (!is_enabled_auth('lti')) {
     print_error('pluginnotenabled', 'auth', '', get_string('pluginname', 'auth_lti'));

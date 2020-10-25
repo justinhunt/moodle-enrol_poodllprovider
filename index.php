@@ -103,7 +103,7 @@ echo "<p>" .get_string('toolsprovided_help', 'enrol_poodllprovider') . "</p>";
 echo "<p class=helplink>" . $OUTPUT->doc_link('enrol/poodllprovider/index',
     get_string('morehelp')) ."</p>";
 
-if (\enrol_poodllprovider\helper::count_poodllprovider_tools(array('courseid' => $courseid)) > 0) {
+if (\enrol_poodllprovider\helper::count_lti_tools(array('courseid' => $courseid)) > 0) {
     $table = new \enrol_poodllprovider\manage_table($courseid);
     $table->define_baseurl($pageurl);
     $table->out(50, false);

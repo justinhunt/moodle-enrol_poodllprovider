@@ -184,26 +184,38 @@ class tool_provider extends ToolProvider {
     protected function onContentItem() {
         global $OUTPUT, $CFG,$COURSE;
 
-        //$tools = helper::get_lti_tools(array("courseid"=>$COURSE->id));
+
         $formdataitems = array();
-        $tools = helper::get_lti_tools();
-        //$thetool = array_pop($tools);
+        //just fetch tools from this course
+        $tools = helper::get_lti_tools(array("courseid"=>$this->tool->courseid));
+        //$tools = helper::get_lti_tools();
+
         foreach($tools as $thetool) {
+
+            //discard the current tool
+            if($thetool->id == $this->tool->id){
+                continue;
+            }
 
             //first get the content_items Json that LTI expects
             //this is the payload that when the user selects from list of items is returned as the selected activity
-            //so we only return one. We could return multiple, but we have no need for this and consumer may not support it.
+            //so we only return one. Technically we can return multiple items, but we have no need for this and consumer may not support it.
             $tdata = new \stdClass();
             $tdata->title = $thetool->name;
             $tdata->name = $thetool->name;
             $tdata->text = $thetool->name;
             $tdata->url = helper::get_launch_url($thetool->id);
+
+            //we can add an icon url and a thumbnail url. We should have an icon at least. I am not sure where the thumbnail shows.
             //$tdata->icon='';
+            //$tdata->thumbnail='';
             $raw_contentitems = $OUTPUT->render_from_template('enrol_poodllprovider/contentitem', $tdata);
+
+            //The code returned from template has html that breaks the signature signing. So we json it which removes the junk.
             $jci = json_decode($raw_contentitems);
             $contentitems = json_encode($jci);
 
-            //now we collect the data, including signature that makes the form. One for each selectable item/activity
+            //now we collect the data, including signature that makes the form.
             $errorUrl = $this->returnUrl;
             $fdata = array();
             $fdata['content_items'] = $contentitems;
@@ -219,13 +231,13 @@ class tool_provider extends ToolProvider {
                 $fdata = $this->sign_parameters($errorUrl, 'ContentItemSelection', $version, $fdata);
             }
 
-            //these are not needed in calc of signature so add these later
+            //these are not needed in calc of signature (and would break the signature comparison) so add these later
             $fdata['content_item_return_url'] = $this->returnUrl;
             $fdata['lti_message_type'] = 'ContentItemSelection';
             $fdata['itemnumber']=$thetool->id;
+            $fdata['name']=$thetool->name;
             $fdata = (object) $fdata;
             $formdataitems[]=$fdata;
-            //$fcontent = $OUTPUT->render_from_template('enrol_poodllprovider/contentitemselectable', $fdata);
         }
         $contentitemsdata = new \stdClass();
         $contentitemsdata->formdataitems = $formdataitems;

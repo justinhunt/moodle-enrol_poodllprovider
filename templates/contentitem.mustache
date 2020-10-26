@@ -1,7 +1,7 @@
 {
   "@context" : "http://purl.imsglobal.org/ctx/lti/v1/ContentItem",
   "@graph" : [
-        { "@type" : "ContentItem",
+        { "@type" : "LtiLinkItem",
             "@id" : "{{id}}",
             "url" : "{{{url}}}",
             "title": "{{title}}",
@@ -12,10 +12,20 @@
                 "height" : 45
             },
 {{/icon}}
+{{#thumbnail}}
+            "thumbnail" : {
+                "@id" : "{{{thumbnail}}}",
+                "width" : 100,
+                "height" : 150
+            },
+{{/thumbnail}}
             "text" : "{{text}}",
-            "mediaType" : "text/html",
+            "mediaType" : "application/vnd.ims.lti.v1.ltilink",
+            "custom" : {
+                "force_embed" : "1"
+            },
             "placementAdvice" : {
-                "presentationDocumentTarget" : "window",
+                "presentationDocumentTarget" : "frame",
                 "windowTarget" : "anLTIApp"
             }
         }

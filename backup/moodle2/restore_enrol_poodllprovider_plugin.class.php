@@ -46,8 +46,8 @@ class restore_enrol_poodllprovider_plugin extends restore_enrol_plugin {
     protected function define_enrol_plugin_structure() {
 
         $paths = array();
-        $paths[] = new restore_path_element('enrol_pp_tool', $this->connectionpoint->get_path() . '/tool');
-        $paths[] = new restore_path_element('enrol_pp_users', $this->connectionpoint->get_path() . '/tool/users/user');
+        $paths[] = new restore_path_element('enrol_pp_tool', $this->connectionpoint->get_path() . '/pptool');
+        $paths[] = new restore_path_element('enrol_pp_users', $this->connectionpoint->get_path() . '/pptool/ppusers/ppuser');
 
         return $paths;
     }

@@ -43,29 +43,29 @@ class backup_enrol_poodllprovider_plugin extends backup_enrol_plugin {
         $plugin = $this->get_plugin_element();
 
         // Define our elements.
-        $tool = new backup_nested_element('tool', array('id'), array(
+        $pptool = new backup_nested_element('pptool', array('id'), array(
             'enrolid', 'contextid', 'institution', 'lang', 'timezone', 'maxenrolled', 'maildisplay', 'city',
             'country', 'gradesync', 'gradesynccompletion', 'membersync', 'membersyncmode',  'roleinstructor',
             'rolelearner', 'secret', 'timecreated', 'timemodified'));
 
-        $users = new backup_nested_element('users');
+        $ppusers = new backup_nested_element('ppusers');
 
-        $user = new backup_nested_element('user', array('id'), array(
+        $ppuser = new backup_nested_element('ppuser', array('id'), array(
             'userid', 'toolid', 'serviceurl', 'sourceid', 'consumerkey', 'consumersecret', 'membershipurl',
             'membershipsid'));
 
         // Build elements hierarchy.
-        $plugin->add_child($tool);
-        $tool->add_child($users);
-        $users->add_child($user);
+        $plugin->add_child($pptool);
+        $pptool->add_child($ppusers);
+        $ppusers->add_child($ppuser);
 
         // Set sources to populate the data.
-        $tool->set_source_table('enrol_pp_tools',
+        $pptool->set_source_table('enrol_pp_tools',
             array('enrolid' => backup::VAR_PARENTID));
 
         // Users are only added only if users included.
         if ($this->task->get_setting_value('users')) {
-            $user->set_source_table('enrol_pp_users', array('toolid' => backup::VAR_PARENTID));
+            $ppuser->set_source_table('enrol_pp_users', array('toolid' => backup::VAR_PARENTID));
         }
     }
 }

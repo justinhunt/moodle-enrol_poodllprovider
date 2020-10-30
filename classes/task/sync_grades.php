@@ -50,8 +50,8 @@ class sync_grades extends \core\task\scheduled_task {
     public function execute() {
         global $DB, $CFG;
 
-        require_once($CFG->dirroot . '/enrol/poodllprovider/ims-blti/OAuth.php');
-        require_once($CFG->dirroot . '/enrol/poodllprovider/ims-blti/OAuthBody.php');
+        require_once($CFG->dirroot . '/enrol/lti/ims-blti/OAuth.php');
+        require_once($CFG->dirroot . '/enrol/lti/ims-blti/OAuthBody.php');
         require_once($CFG->dirroot . '/lib/completionlib.php');
         require_once($CFG->libdir . '/gradelib.php');
         require_once($CFG->dirroot . '/grade/querylib.php');

@@ -1,21 +1,12 @@
-{{#formdataitems}}
-{{> enrol_poodllprovider/contentitemform}}
-{{/formdataitems}}
+{{> enrol_poodllprovider/top-menu}}
 
+{{#sections}}
+    {{> enrol_poodllprovider/activity-list}}
+{{/sections}}
 
-<!-- Custom JS from template  goes goes here  -->
 {{#js}}
-
-require(['jquery'], function($) {
-
-    $('.poodllprovider-item-link').click(function(e){
-        e.preventDefault();
-        var formid = $(this).data('formid');
-         document.getElementById(formid).submit();
-        //return false;
+    require(['jquery','enrol_poodllprovider/provider'], function($, Provider) {
+        var root = $('#page-enrol-poodllprovider-tool');
+        Provider.init(root);
     });
-}); //end of script
-
-
-
 {{/js}}

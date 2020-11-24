@@ -13,4 +13,23 @@
     <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
     <input type="hidden" name="oauth_signature" value="{{oauth_signature}}" />
 </form>
-<a class="btn btn-success poodllprovider-item-link" data-formid="poodllprovider_item_{{itemnumber}}" href="#">{{name}}</a>
+<div class="row activity">
+    <div class="offset-sm-2 col-sm-4 p-2 activity-name">
+        <img class="icon icon" alt="" aria-hidden="true" src="{{icon}}">{{name}}
+    </div>
+    <div class="col-sm-2 p-2 activity-action">
+        <a class="menu-action" title="{{#str}}select{{/str}}" data-action="activity-select" data-itemnumber="{{itemnumber}}">
+            <i class="icon fa fa-plus" aria-hidden="true"></i>
+        </a>
+        {{#teachercanmanage}}
+            <a class="menu-action" title="{{#str}}edit{{/str}}" data-action="activity-edit" data-module="{{modname}}" data-contextid="{{contextid}}" data-itemnumber="{{itemnumber}}" data-cmid="{{cmid}}">
+                <i class="icon fa fa-cog" aria-hidden="true"></i>
+            </a>
+            <a class="menu-action" title="{{#str}}delete{{/str}}" data-action="activity-delete" data-module="{{modname}}" data-contextid="{{contextid}}" data-itemnumber="{{itemnumber}}" data-cmid="{{cmid}}">
+                <i class="icon fa fa-trash" aria-hidden="true"></i>
+            </a>
+        {{/teachercanmanage}}
+    </div>
+</div>
+
+

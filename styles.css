@@ -1,0 +1,18 @@
+#page-enrol-poodllprovider-tool #page {
+    margin: 0;
+    padding: 0;
+}
+#page-enrol-poodllprovider-tool #region-main {
+    padding: 0;
+    border: 0;
+}
+#page-enrol-poodllprovider-tool .sections {
+    overflow: hidden;
+}
+#page-enrol-poodllprovider-tool a[data-action="collapse"],
+#page-enrol-poodllprovider-tool a.menu-action {
+    cursor: pointer;
+}
+#page-enrol-poodllprovider-tool #page-content {
+    margin: 0;
+}

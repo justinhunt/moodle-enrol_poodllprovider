@@ -90,3 +90,6 @@ $string['tooltobeprovided'] = 'Tool to be published';
 $string['toolurl'] = 'Tool URL';
 $string['userdefaultvalues'] = 'User default values';
 $string['cartridgeurl'] = 'Cartridge URL';
+$string['createactivity'] = 'Create Activity';
+$string['modtypes'] = 'Module types';
+$string['teachercanmanageactivities'] = 'Teacher can add/edit activities';

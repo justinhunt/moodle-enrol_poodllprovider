@@ -182,18 +182,18 @@ class tool_provider extends ToolProvider {
     }
 
     protected function onContentItem() {
-        global $OUTPUT, $CFG,$COURSE;
-
+        global $OUTPUT, $CFG ,$COURSE;
 
         $formdataitems = array();
-        //just fetch tools from this course
-        $tools = helper::get_lti_tools(array("courseid"=>$this->tool->courseid));
+
+        // Just fetch tools from this course.
+        $tools = helper::get_lti_tools(array("courseid" => $this->tool->courseid));
         //$tools = helper::get_lti_tools();
+        $coursecontext = \context_course::instance($this->tool->courseid);
 
         foreach($tools as $thetool) {
-
-            //discard the current tool
-            if($thetool->id == $this->tool->id){
+            // Discard the current tool.
+            if ($thetool->id == $this->tool->id){
                 continue;
             }
 
@@ -206,12 +206,9 @@ class tool_provider extends ToolProvider {
             $tdata->text = $thetool->name;
             $tdata->url = helper::get_launch_url($thetool->id);
 
-            //we can add an icon url and a thumbnail url. We should have an icon at least. I am not sure where the thumbnail shows.
-            //$tdata->icon='';
-            //$tdata->thumbnail='';
             $raw_contentitems = $OUTPUT->render_from_template('enrol_poodllprovider/contentitem', $tdata);
 
-            //The code returned from template has html that breaks the signature signing. So we json it which removes the junk.
+            // The code returned from template has html that breaks the signature signing. So we json it which removes the junk.
             $jci = json_decode($raw_contentitems);
             $contentitems = json_encode($jci);
 
@@ -231,19 +228,55 @@ class tool_provider extends ToolProvider {
                 $fdata = $this->sign_parameters($errorUrl, 'ContentItemSelection', $version, $fdata);
             }
 
-            //these are not needed in calc of signature (and would break the signature comparison) so add these later
+            // These are not needed in calc of signature (and would break the signature comparison) so add these later
             $fdata['content_item_return_url'] = $this->returnUrl;
             $fdata['lti_message_type'] = 'ContentItemSelection';
-            $fdata['itemnumber']=$thetool->id;
-            $fdata['name']=$thetool->name;
-            $fdata = (object) $fdata;
-            $formdataitems[]=$fdata;
+            $fdata['itemnumber'] = $thetool->id;
+            $fdata['name'] = $thetool->name;
+
+            $context = context::instance_by_id($thetool->contextid);
+            if ($context->contextlevel == CONTEXT_MODULE) {
+                $cm = get_coursemodule_from_id('', $context->instanceid, $thetool->courseid, false, MUST_EXIST);
+                $fdata['cmid'] = $cm->id;
+                $fdata['modname'] = $cm->modname;
+                $fdata = (object) $fdata;
+                $formdataitems[$cm->modname][] = $fdata;
+            } else {
+                $fdata = (object) $fdata;
+                $formdataitems['courses'][] = $fdata;
+                $formdataitems[] = $fdata;
+            }
         }
         $contentitemsdata = new \stdClass();
-        $contentitemsdata->formdataitems = $formdataitems;
+
+        // Available mods.
+        $cfg = get_config('enrol_poodllprovider');
+
+        $teachercanmanage = $cfg->teachercanmanageactivities;
+
+        foreach (explode(',', $cfg->modtypes) as $modname) {
+            $mod = new stdClass();
+            $mod->modname = $modname;
+            $mod->pluginname = get_string('pluginname', $modname);
+            $mod->icon = $OUTPUT->image_url('icon', $modname);
+            $mod->title = get_string('addnew', '', $mod->pluginname);
+            $contentitemsdata->availablemods[] = $mod;
+
+            $section = new stdClass();
+            $section->name = $modname;
+            $section->title = get_string('pluginname', $modname);
+            $section->items = $formdataitems[$modname] ?? null;
+            $section->icon = $mod->icon;
+            $section->contextid = $coursecontext->id;
+            $section->itemnumber = $thetool->id;
+            $section->teachercanmanage = $teachercanmanage;
+
+            $contentitemsdata->sections[] = $section;
+        }
+
         $fcontent = $OUTPUT->render_from_template('enrol_poodllprovider/contentitemspage', $contentitemsdata);
+
         echo $fcontent;
-        return;
     }
 
     protected function sign_parameters($url, $type, $version, $params) {
@@ -300,7 +333,6 @@ class tool_provider extends ToolProvider {
         }
         return $params;
     }
-
 
     protected function raw_encode($input){
         return str_replace('+', ' ', str_replace('%7E', '~', rawurlencode($input)));

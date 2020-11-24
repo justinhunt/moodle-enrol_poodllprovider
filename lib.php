@@ -27,6 +27,12 @@ use IMSGlobal\LTI\ToolProvider\ToolConsumer;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir.'/filelib.php');
+require_once($CFG->libdir.'/gradelib.php');
+require_once($CFG->libdir.'/completionlib.php');
+require_once($CFG->libdir.'/plagiarismlib.php');
+require_once($CFG->dirroot . '/course/modlib.php');
+
 /**
  * poodllprovider enrolment plugin class.
  *
@@ -414,4 +420,149 @@ function enrol_poodllprovider_extend_navigation_course($navigation, $course, $co
             $navigation->add_node($settingsnode);
         }
     }
+}
+
+/**
+ * Serve the new group form as a fragment.
+ *
+ * @param array $args List of named arguments for the fragment loader.
+ * @return string
+ */
+function enrol_poodllprovider_output_fragment_new_group_form($args) {
+    global $CFG;
+
+    require_once($CFG->dirroot . '/group/group_form.php');
+    $args = (object) $args;
+    $context = $args->context;
+
+    $formdata = [];
+    if (!empty($args->jsonformdata)) {
+        $serialiseddata = json_decode($args->jsonformdata);
+        parse_str($serialiseddata, $formdata);
+    }
+
+    list($ignored, $course) = get_context_info_array($context->id);
+    $group = new stdClass();
+    $group->courseid = $course->id;
+
+    //require_capability('moodle/course:managegroups', $context);
+    $editoroptions = [
+        'maxfiles' => EDITOR_UNLIMITED_FILES,
+        'maxbytes' => $course->maxbytes,
+        'trust' => false,
+        'context' => $context,
+        'noclean' => true,
+        'subdirs' => false
+    ];
+    $group = file_prepare_standard_editor($group, 'description', $editoroptions, $context, 'group', 'description', null);
+
+    $mform = new group_form(null, array('editoroptions' => $editoroptions), 'post', '', null, true, $formdata);
+    // Used to set the courseid.
+    $mform->set_data($group);
+
+    if (!empty($args->jsonformdata)) {
+        // If we were passed non-empty form data we want the mform to call validation functions and show errors.
+        $mform->is_validated();
+    }
+
+    ob_start();
+    $mform->display();
+    $o .= ob_get_contents();
+    ob_end_clean();
+
+    return $o;
+}
+/**
+ * Serve the new readaloud form as a fragment.
+ *
+ * @param array $args List of named arguments for the fragment loader.
+ * @return string
+ */
+function enrol_poodllprovider_output_fragment_readaloud_form($args) {
+    return mod_form_output($args, 'readaloud');
+}
+
+/**
+ * Serve the new wordcards form as a fragment.
+ *
+ * @param array $args List of named arguments for the fragment loader.
+ * @return string
+ */
+function enrol_poodllprovider_output_fragment_wordcards_form($args) {
+    return mod_form_output($args, 'wordcards');
+}
+/**
+ * Serve the new group form as a fragment.
+ *
+ * @param array $args List of named arguments for the fragment loader.
+ * @return string
+ */
+function enrol_poodllprovider_output_fragment_poodlltime_form($args) {
+    return mod_form_output($args, 'poodlltime');
+}
+
+/**
+ * Render module form
+ *
+ * @param $args
+ * @param $modname
+ * @return string
+ * @throws moodle_exception
+ */
+function mod_form_output($args, $modname) {
+    global $CFG;
+
+    $modmoodleform = "$CFG->dirroot/mod/".$modname."/mod_form.php";
+
+    if (file_exists($modmoodleform)) {
+        require_once($modmoodleform);
+    } else {
+        print_error('noformdesc');
+    }
+
+    $args = (object) $args;
+    $context = $args->context;
+    $cmid = $args->cmid;
+
+    $formdata = [];
+    if (!empty($args->jsonformdata)) {
+        $serialiseddata = json_decode($args->jsonformdata);
+        parse_str($serialiseddata, $formdata);
+    }
+
+    list($ignored, $course) = get_context_info_array($context->id);
+
+    $section = 0;
+    $sectionreturn = null;
+
+    if (!empty($cmid)) {
+        // Check the course module exists.
+        $cm = get_coursemodule_from_id('', $cmid, 0, false, MUST_EXIST);
+
+        list($cm, $contextcourse, $module, $data, $cw) = get_moduleinfo_data($cm, $course);
+        $data->return = 0;
+        $data->sr = $sectionreturn;
+        $data->update = $cmid;
+    } else {
+        list($module, $contextcourse, $cw, $cm, $data) = prepare_new_moduleinfo_data($course, $modname, $section);
+        $data->return = 0;
+        $data->sr = $sectionreturn;
+        $data->add = $modname;
+    }
+    $mformclassname = 'mod_'.$modname.'_mod_form';
+    $mform = new $mformclassname($data, $cw->section, $cm, $course);
+    $mform->set_data($data);
+
+    if (!empty($args->jsonformdata) && $args->jsonformdata != '{}') {
+        // If we were passed non-empty form data we want the mform to call validation functions and show errors.
+        $mform->is_validated();
+    }
+
+    $o = '';
+    ob_start();
+    $mform->display();
+    $o .= ob_get_contents();
+    ob_end_clean();
+
+    return $o;
 }

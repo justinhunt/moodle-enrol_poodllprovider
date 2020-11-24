@@ -71,4 +71,27 @@ if ($ADMIN->fulltree) {
         get_string_manager()->get_list_of_translations()));
 
     $settings->add(new admin_setting_configtext('enrol_poodllprovider/institution', get_string('institution'), '', ''));
+
+    // Mod selector.
+    $choices = array();
+    $icons = array();
+    foreach ($DB->get_records('modules', array(), 'name ASC') as $module) {
+        $choices[$module->name] = get_string('modulename', $module->name);
+    }
+
+    $settings->add(
+        new admin_setting_configmulticheckbox(
+            'enrol_poodllprovider/modtypes',
+            get_string('modtypes', 'enrol_poodllprovider'),
+            '',
+            array('readaloud' => 1, 'wordcards' => 1, 'poodlltime' => 1),
+            $choices
+        )
+    );
+
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'enrol_poodllprovider/teachercanmanageactivities',
+            get_string('teachercanmanageactivities', 'enrol_poodllprovider'), '', 1)
+    );
 }

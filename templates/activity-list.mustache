@@ -1,0 +1,38 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template enrol_poodllprovider/activity-list
+}}
+<section class="activity-list collapse sections" data-module="{{name}}" class="collapse" id="collapse-{{name}}">
+    <div class="p-3">
+        {{#teachercanmanage}}
+            <button class="btn btn-primary float-right" data-action="activity-add" data-module="{{name}}" data-contextid="{{contextid}}" data-itemnumber="{{itemnumber}}">
+                <i class="fa fa-plus"></i> New Activity
+            </button>
+        {{/teachercanmanage}}
+        <h1>{{title}}</h1>
+    </div>
+    {{#items}}
+        {{> enrol_poodllprovider/contentitemform}}
+    {{/items}}
+
+    <div class="footer p-2 mt-3">
+        <button class="btn btn-primary float-right" data-action="main-menu" data-module="{{name}}">
+            <i class="fa fa-bars"></i> Menu
+        </button>
+    </div>
+</section>

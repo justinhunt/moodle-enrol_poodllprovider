@@ -89,7 +89,11 @@ if ($ltiversion === \IMSGlobal\LTI\ToolProvider\ToolProvider::LTI_VERSION1) {
 }
 
 // Handle the request.
+ob_start();
 $toolprovider->handleRequest();
+$o = ob_get_contents();
+ob_end_clean();
 
 echo $OUTPUT->header();
+echo $o;
 echo $OUTPUT->footer();

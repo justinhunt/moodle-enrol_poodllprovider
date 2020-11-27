@@ -182,9 +182,112 @@ class tool_provider extends ToolProvider {
     }
 
     protected function onContentItem() {
-        global $OUTPUT, $CFG ,$COURSE;
+        global $OUTPUT, $CFG ,$COURSE,$DB;
 
         $formdataitems = array();
+        
+  //==============================      
+  //create user as instructor - so that they can create activites
+  //==============================      
+          // Set the user data.
+        $user = new stdClass();
+        $user->username = helper::create_username($this->consumer->getKey(), $this->user->ltiUserId);
+        if (!empty($this->user->firstname)) {
+            $user->firstname = $this->user->firstname;
+        } else {
+            $user->firstname = $this->user->getRecordId();
+        }
+        if (!empty($this->user->lastname)) {
+            $user->lastname = $this->user->lastname;
+        } else {
+            $user->lastname = $this->tool->contextid;
+        }
+
+        $user->email = core_user::clean_field($this->user->email, 'email');
+
+        // Get the user data from the LTI consumer.
+        $user = helper::assign_user_tool_data($this->tool, $user);
+
+        // Check if the user exists.
+        if (!$dbuser = $DB->get_record('user', ['username' => $user->username, 'deleted' => 0])) {
+            // If the email was stripped/not set then fill it with a default one. This
+            // stops the user from being redirected to edit their profile page.
+            if (empty($user->email)) {
+                $user->email = $user->username .  "@example.com";
+            }
+
+            $user->auth = 'lti';
+            $user->id = \user_create_user($user);
+
+            // Get the updated user record.
+            $user = $DB->get_record('user', ['id' => $user->id]);
+        } else {
+            if (helper::user_match($user, $dbuser)) {
+                $user = $dbuser;
+            } else {
+                // If email is empty remove it, so we don't update the user with an empty email.
+                if (empty($user->email)) {
+                    unset($user->email);
+                }
+
+                $user->id = $dbuser->id;
+                unset($user->lang);
+                \user_update_user($user);
+
+                // Get the updated user record.
+                $user = $DB->get_record('user', ['id' => $user->id]);
+            }
+        }
+
+        // Check if we are an instructor.
+        $isinstructor = $this->user->isStaff() || $this->user->isAdmin();
+        $context = \context_course::instance($this->tool->courseid);
+        $courseid=$this->tool->courseid;
+
+
+        // Enrol the user in the course with no role.
+        $result = helper::enrol_user($this->tool, $user->id);
+
+        // Display an error, if there is one.
+        if ($result !== helper::ENROLMENT_SUCCESSFUL) {
+            print_error($result, 'enrol_poodllprovider');
+            exit();
+        }
+
+        // Give the user the role in the given context.
+        $roleid = $isinstructor ? $this->tool->roleinstructor : $this->tool->rolelearner;
+        role_assign($roleid, $user->id, $this->tool->contextid);
+
+        // Login user.
+        $sourceid = $this->user->ltiResultSourcedId;
+
+        // Check if we have recorded this user before.
+        if ($userlog = $DB->get_record('enrol_pp_users', ['toolid' => $this->tool->id, 'userid' => $user->id])) {
+            if ($userlog->sourceid != $sourceid) {
+                $userlog->sourceid = $sourceid;
+            }
+
+            $userlog->lastaccess = time();
+            $DB->update_record('enrol_pp_users', $userlog);
+        } else {
+            // Add the user details so we can use it later when syncing grades and members.
+            $userlog = new stdClass();
+            $userlog->userid = $user->id;
+            $userlog->toolid = $this->tool->id;
+            $userlog->sourceid = $sourceid;
+            $userlog->consumerkey = $this->consumer->getKey();
+            $userlog->consumersecret = $this->tool->secret;
+            $userlog->lastgrade = 0;
+            $userlog->lastaccess = time();
+            $userlog->timecreated = time();
+            $DB->insert_record('enrol_pp_users', $userlog);
+        }
+
+        // Finalise the user log in.
+        complete_user_login($user);
+//==============================
+// End of creare user
+//==============================
 
         // Just fetch tools from this course.
         $tools = helper::get_lti_tools(array("courseid" => $this->tool->courseid));

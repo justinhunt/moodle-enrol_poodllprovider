@@ -93,3 +93,5 @@ $string['cartridgeurl'] = 'Cartridge URL';
 $string['createactivity'] = 'Create Activity';
 $string['modtypes'] = 'Module types';
 $string['teachercanmanageactivities'] = 'Teacher can add/edit activities';
+$string['delete'] = 'Delete';
+$string['deleteconfirm'] = 'Do you really want to delete?';

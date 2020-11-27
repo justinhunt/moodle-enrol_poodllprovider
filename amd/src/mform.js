@@ -229,7 +229,12 @@ define([
             },
             done: this.handleFormSubmissionResponse.bind(this, formData),
             fail: this.handleFormSubmissionFailure.bind(this, formData)
-        }]);
+        }])[0]
+        .then(function(data) {
+            if (data !== '') {
+                $('section.activity-list.sections.collapse.show .row.activity:last').after(data);
+            }
+        });
     };
 
     /**

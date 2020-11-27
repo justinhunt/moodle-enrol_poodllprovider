@@ -35,6 +35,7 @@ use IMSGlobal\LTI\Profile\Item;
 use IMSGlobal\LTI\Profile\Message;
 use IMSGlobal\LTI\Profile\ResourceHandler;
 use IMSGlobal\LTI\Profile\ServiceDefinition;
+use IMSGlobal\LTI\ToolProvider\ToolConsumer;
 use IMSGlobal\LTI\ToolProvider\ToolProvider;
 use moodle_exception;
 use moodle_url;
@@ -51,10 +52,10 @@ require_once($CFG->dirroot . '/user/lib.php');
  */
 class tool_provider extends ToolProvider {
 
-    /**
+    /**``
      * @var stdClass $tool The object representing the enrol instance providing this poodllprovider tool
      */
-    protected $tool;
+    public $tool;
 
     /**
      * Remove $this->baseUrl (wwwroot) from a given url string and return it.
@@ -182,112 +183,13 @@ class tool_provider extends ToolProvider {
     }
 
     protected function onContentItem() {
-        global $OUTPUT, $CFG ,$COURSE,$DB;
+        global $OUTPUT, $SESSION;
+
+        $this->verify_user();
 
         $formdataitems = array();
-        
-  //==============================      
-  //create user as instructor - so that they can create activites
-  //==============================      
-          // Set the user data.
-        $user = new stdClass();
-        $user->username = helper::create_username($this->consumer->getKey(), $this->user->ltiUserId);
-        if (!empty($this->user->firstname)) {
-            $user->firstname = $this->user->firstname;
-        } else {
-            $user->firstname = $this->user->getRecordId();
-        }
-        if (!empty($this->user->lastname)) {
-            $user->lastname = $this->user->lastname;
-        } else {
-            $user->lastname = $this->tool->contextid;
-        }
 
-        $user->email = core_user::clean_field($this->user->email, 'email');
-
-        // Get the user data from the LTI consumer.
-        $user = helper::assign_user_tool_data($this->tool, $user);
-
-        // Check if the user exists.
-        if (!$dbuser = $DB->get_record('user', ['username' => $user->username, 'deleted' => 0])) {
-            // If the email was stripped/not set then fill it with a default one. This
-            // stops the user from being redirected to edit their profile page.
-            if (empty($user->email)) {
-                $user->email = $user->username .  "@example.com";
-            }
-
-            $user->auth = 'lti';
-            $user->id = \user_create_user($user);
-
-            // Get the updated user record.
-            $user = $DB->get_record('user', ['id' => $user->id]);
-        } else {
-            if (helper::user_match($user, $dbuser)) {
-                $user = $dbuser;
-            } else {
-                // If email is empty remove it, so we don't update the user with an empty email.
-                if (empty($user->email)) {
-                    unset($user->email);
-                }
-
-                $user->id = $dbuser->id;
-                unset($user->lang);
-                \user_update_user($user);
-
-                // Get the updated user record.
-                $user = $DB->get_record('user', ['id' => $user->id]);
-            }
-        }
-
-        // Check if we are an instructor.
-        $isinstructor = $this->user->isStaff() || $this->user->isAdmin();
-        $context = \context_course::instance($this->tool->courseid);
-        $courseid=$this->tool->courseid;
-
-
-        // Enrol the user in the course with no role.
-        $result = helper::enrol_user($this->tool, $user->id);
-
-        // Display an error, if there is one.
-        if ($result !== helper::ENROLMENT_SUCCESSFUL) {
-            print_error($result, 'enrol_poodllprovider');
-            exit();
-        }
-
-        // Give the user the role in the given context.
-        $roleid = $isinstructor ? $this->tool->roleinstructor : $this->tool->rolelearner;
-        role_assign($roleid, $user->id, $this->tool->contextid);
-
-        // Login user.
-        $sourceid = $this->user->ltiResultSourcedId;
-
-        // Check if we have recorded this user before.
-        if ($userlog = $DB->get_record('enrol_pp_users', ['toolid' => $this->tool->id, 'userid' => $user->id])) {
-            if ($userlog->sourceid != $sourceid) {
-                $userlog->sourceid = $sourceid;
-            }
-
-            $userlog->lastaccess = time();
-            $DB->update_record('enrol_pp_users', $userlog);
-        } else {
-            // Add the user details so we can use it later when syncing grades and members.
-            $userlog = new stdClass();
-            $userlog->userid = $user->id;
-            $userlog->toolid = $this->tool->id;
-            $userlog->sourceid = $sourceid;
-            $userlog->consumerkey = $this->consumer->getKey();
-            $userlog->consumersecret = $this->tool->secret;
-            $userlog->lastgrade = 0;
-            $userlog->lastaccess = time();
-            $userlog->timecreated = time();
-            $DB->insert_record('enrol_pp_users', $userlog);
-        }
-
-        // Finalise the user log in.
-        complete_user_login($user);
-//==============================
-// End of creare user
-//==============================
+        $SESSION->lti_posted_data = $_POST;
 
         // Just fetch tools from this course.
         $tools = helper::get_lti_tools(array("courseid" => $this->tool->courseid));
@@ -350,6 +252,7 @@ class tool_provider extends ToolProvider {
                 $formdataitems[] = $fdata;
             }
         }
+
         $contentitemsdata = new \stdClass();
 
         // Available mods.
@@ -382,14 +285,15 @@ class tool_provider extends ToolProvider {
         echo $fcontent;
     }
 
-    protected function sign_parameters($url, $type, $version, $params) {
-        global $CFG;
+    public function sign_parameters($url, $type, $version, $params) {
+        global $CFG, $SESSION;
 
         require_once($CFG->dirroot . '/mod/lti/OAuth.php');
         require_once($CFG->dirroot . '/mod/lti/TrivialStore.php');
 
         $key = $this->consumer->getKey();
         $secret = $this->consumer->secret;
+
         $token = null;
 
         $queryParams = array();
@@ -421,7 +325,6 @@ class tool_provider extends ToolProvider {
         $params['lti_version'] = $version;
         $params['lti_message_type'] = $type;
 
-
         $store = new \moodle\mod\lti\TrivialOAuthDataStore();
         $store->add_consumer($key, $secret);
         $server = new \moodle\mod\lti\OAuthServer($store);
@@ -435,6 +338,48 @@ class tool_provider extends ToolProvider {
             unset($params[$name]);
         }
         return $params;
+    }
+
+    public function get_lti_tool_data() {
+        global $OUTPUT, $SESSION;
+
+        $tdata = new \stdClass();
+        $tdata->title = $this->tool->name;
+        $tdata->name = $this->tool->name;
+        $tdata->text = $this->tool->name;
+        $tdata->url = helper::get_launch_url($this->tool->id);
+
+        $raw_contentitems = $OUTPUT->render_from_template('enrol_poodllprovider/contentitem', $tdata);
+
+        // The code returned from template has html that breaks the signature signing. So we json it which removes the junk.
+        $jci = json_decode($raw_contentitems);
+        $contentitems = json_encode($jci);
+
+        //now we collect the data, including signature that makes the form.
+        $errorUrl = (!empty($this->returnUrl)) ? $this->returnUrl : $SESSION->lti_posted_data['content_item_return_url'];
+        $fdata = array();
+        $fdata['content_items'] = $contentitems;
+
+        $version = self::LTI_VERSION1;
+        $fdata = $this->sign_parameters($errorUrl, 'ContentItemSelection', $version, $fdata);
+
+        // These are not needed in calc of signature (and would break the signature comparison) so add these later
+        $fdata['content_item_return_url'] = (!empty($this->returnUrl)) ? $this->returnUrl : $SESSION->lti_posted_data['content_item_return_url'];
+        $fdata['lti_message_type'] = 'ContentItemSelection';
+        $fdata['itemnumber'] = $this->tool->id;
+        $fdata['name'] = $this->tool->name;
+        $fdata['teachercanmanage'] = get_config('enrol_poodllprovider', 'teachercanmanageactivities');
+
+        $context = context::instance_by_id($this->tool->contextid);
+
+        if ($context->contextlevel == CONTEXT_MODULE) {
+            $cm = get_coursemodule_from_id('', $context->instanceid, $this->tool->courseid, false, MUST_EXIST);
+            $fdata['cmid'] = $cm->id;
+            $fdata['modname'] = $cm->modname;
+            $fdata['icon'] = $OUTPUT->image_url('icon', $cm->modname);
+        }
+
+        return $fdata;
     }
 
     protected function raw_encode($input){
@@ -708,5 +653,112 @@ class tool_provider extends ToolProvider {
         if (!$mappingexists) {
             $DB->insert_record('enrol_pp_tool_consumer_map', (object) $mappingparams);
         }
+    }
+
+    /**
+     * Verify LTI user
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws moodle_exception
+     */
+    public function verify_user() {
+        global $DB;
+
+        $user = new stdClass();
+        $user->username = helper::create_username($this->consumer->getKey(), $this->user->ltiUserId);
+        if (!empty($this->user->firstname)) {
+            $user->firstname = $this->user->firstname;
+        } else {
+            $user->firstname = $this->user->getRecordId();
+        }
+        if (!empty($this->user->lastname)) {
+            $user->lastname = $this->user->lastname;
+        } else {
+            $user->lastname = $this->tool->contextid;
+        }
+
+        $user->email = core_user::clean_field($this->user->email, 'email');
+
+        // Get the user data from the LTI consumer.
+        $user = helper::assign_user_tool_data($this->tool, $user);
+
+        // Check if the user exists.
+        if (!$dbuser = $DB->get_record('user', ['username' => $user->username, 'deleted' => 0])) {
+            // If the email was stripped/not set then fill it with a default one. This
+            // stops the user from being redirected to edit their profile page.
+            if (empty($user->email)) {
+                $user->email = $user->username .  "@example.com";
+            }
+
+            $user->auth = 'lti';
+            $user->id = \user_create_user($user);
+
+            // Get the updated user record.
+            $user = $DB->get_record('user', ['id' => $user->id]);
+        } else {
+            if (helper::user_match($user, $dbuser)) {
+                $user = $dbuser;
+            } else {
+                // If email is empty remove it, so we don't update the user with an empty email.
+                if (empty($user->email)) {
+                    unset($user->email);
+                }
+
+                $user->id = $dbuser->id;
+                unset($user->lang);
+                \user_update_user($user);
+
+                // Get the updated user record.
+                $user = $DB->get_record('user', ['id' => $user->id]);
+            }
+        }
+
+        // Check if we are an instructor.
+        $isinstructor = $this->user->isStaff() || $this->user->isAdmin();
+        $context = \context_course::instance($this->tool->courseid);
+        $courseid=$this->tool->courseid;
+
+
+        // Enrol the user in the course with no role.
+        $result = helper::enrol_user($this->tool, $user->id);
+
+        // Display an error, if there is one.
+        if ($result !== helper::ENROLMENT_SUCCESSFUL) {
+            print_error($result, 'enrol_poodllprovider');
+            exit();
+        }
+
+        // Give the user the role in the given context.
+        $roleid = $isinstructor ? $this->tool->roleinstructor : $this->tool->rolelearner;
+        role_assign($roleid, $user->id, $this->tool->contextid);
+
+        // Login user.
+        $sourceid = $this->user->ltiResultSourcedId;
+
+        // Check if we have recorded this user before.
+        if ($userlog = $DB->get_record('enrol_pp_users', ['toolid' => $this->tool->id, 'userid' => $user->id])) {
+            if ($userlog->sourceid != $sourceid) {
+                $userlog->sourceid = $sourceid;
+            }
+
+            $userlog->lastaccess = time();
+            $DB->update_record('enrol_pp_users', $userlog);
+        } else {
+            // Add the user details so we can use it later when syncing grades and members.
+            $userlog = new stdClass();
+            $userlog->userid = $user->id;
+            $userlog->toolid = $this->tool->id;
+            $userlog->sourceid = $sourceid;
+            $userlog->consumerkey = $this->consumer->getKey();
+            $userlog->consumersecret = $this->tool->secret;
+            $userlog->lastgrade = 0;
+            $userlog->lastaccess = time();
+            $userlog->timecreated = time();
+            $DB->insert_record('enrol_pp_users', $userlog);
+        }
+
+        // Finalise the user log in.
+        complete_user_login($user);
     }
 }

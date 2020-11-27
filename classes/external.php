@@ -127,9 +127,14 @@ class external extends \external_api {
             }
 
             $fields = (array)$instance;
-            $plugin->add_instance($course, $fields);
+            $enrolid = $plugin->add_instance($course, $fields);
+
+            $tool = $DB->get_record('enrol_pp_tools', ['enrolid' => $enrolid]);
+
+            return \enrol_poodllprovider\helper::render_lti_tool_item($tool->id);
+
         }
-        return true;
+        return '';
     }
 
     /**
@@ -139,7 +144,7 @@ class external extends \external_api {
      * @since Moodle 3.0
      */
     public static function manage_course_module_returns() {
-        return new external_value(PARAM_BOOL);
+        return new external_value(PARAM_RAW);
     }
 
     /**
@@ -196,6 +201,13 @@ class external extends \external_api {
 
             // Delete the module.
             course_delete_module($cm->id);
+
+            // Delete enrol.
+            $toolinstance = $DB->get_record('enrol_pp_tools', ['contextid' => $modcontext->id]);
+            $instance = $DB->get_record('enrol', ['id' => $toolinstance->enrolid]);
+
+            $plugin = enrol_get_plugin('poodllprovider');
+            $plugin->delete_instance($instance);
         }
     }
 

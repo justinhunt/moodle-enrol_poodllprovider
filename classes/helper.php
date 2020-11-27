@@ -324,6 +324,46 @@ class helper {
     }
 
     /**
+     * @param $toolid
+     * @return mixed
+     */
+    public static function render_lti_tool_item($toolid) {
+        global $DB, $OUTPUT, $SESSION;
+
+        $consumerkey = $SESSION->lti_posted_data['oauth_consumer_key'];
+        $ltiversion = $SESSION->lti_posted_data['lti_version'];
+
+        $tool = \enrol_poodllprovider\helper::get_lti_tool($toolid);
+        $toolprovider = new \enrol_poodllprovider\tool_provider($toolid);
+
+        // Special handling for LTIv1 launch requests.
+        if ($ltiversion === \IMSGlobal\LTI\ToolProvider\ToolProvider::LTI_VERSION1) {
+            $dataconnector = new \enrol_poodllprovider\data_connector();
+            $consumer = new \IMSGlobal\LTI\ToolProvider\ToolConsumer($consumerkey, $dataconnector);
+            // Check if the consumer has already been registered to the enrol_pp_lti2_consumer table. Register if necessary.
+            $consumer->ltiVersion = \IMSGlobal\LTI\ToolProvider\ToolProvider::LTI_VERSION1;
+            // For LTIv1, set the tool secret as the consumer secret.
+            $consumer->secret = $tool->secret;
+            $consumer->name = $SESSION->lti_posted_data['tool_consumer_instance_name'] ?? '';
+            $consumer->consumerName = $consumer->name;
+            $consumer->consumerGuid = $SESSION->lti_posted_data['tool_consumer_instance_guid'] ?? null;
+            $consumer->consumerVersion = $SESSION->lti_posted_data['tool_consumer_info_version'] ?? null;
+            $consumer->enabled = true;
+            $consumer->protected = true;
+            $consumer->save();
+
+            // Set consumer to tool provider.
+            $toolprovider->consumer = $consumer;
+            // Map tool consumer and published tool, if necessary.
+            $toolprovider->map_tool_to_consumer();
+        }
+
+        $data = $toolprovider->get_lti_tool_data();
+
+        return $OUTPUT->render_from_template('enrol_poodllprovider/contentitemform', $data);
+    }
+
+    /**
      * Returns the number of LTI tools.
      *
      * @param array $params The list of SQL params (eg. array('columnname' => value, 'columnname2' => value)).

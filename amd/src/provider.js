@@ -87,28 +87,34 @@ define([
 
         root.on(CustomEvents.events.activate, SELECTORS.ACTIVITY_DELETE, function(e, data) {
             data.originalEvent.preventDefault();
-            //var module = $(this).data('module');
-            //var contextid = $(this).data('contextid');
-            //var itemnumber = $(this).data('itemnumber');
             var cmid = $(this).data('cmid');
+            var itemnumber = $(this).data('itemnumber');
 
-            ModalFactory.create({
-                type: ModalFactory.types.SAVE_CANCEL,
-                title: 'Delete',
-                body: 'Do you really want to delete?',
-            })
-            .then(function(modal) {
-                modal.setSaveButtonText('Delete');
-                var root = modal.getRoot();
-                root.on(ModalEvents.save, function() {
-                    Ajax.call([{
-                        methodname: 'enrol_poodllprovider_delete_modules',
-                        args: {
-                            cmids: [cmid]
-                        }
-                    }]);
+            Str.get_strings([
+                {key: 'delete', component: 'enrol_poodllprovider'},
+                {key: 'deleteconfirm', component: 'enrol_poodllprovider'},
+            ]).then(function(str) {
+                ModalFactory.create({
+                    type: ModalFactory.types.SAVE_CANCEL,
+                    title: str[0],
+                    body: str[1],
+                })
+                .then(function(modal) {
+                    modal.setSaveButtonText(str[0]);
+                    var root = modal.getRoot();
+                    root.on(ModalEvents.save, function() {
+                        Ajax.call([{
+                            methodname: 'enrol_poodllprovider_delete_modules',
+                            args: {
+                                cmids: [cmid]
+                            }
+                        }])[0]
+                            .then(function() {
+                                $("div[data-toolid='" + itemnumber + "']").remove();
+                            });
+                    });
+                    modal.show();
                 });
-                modal.show();
             });
         });
 

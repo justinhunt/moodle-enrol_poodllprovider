@@ -14,6 +14,15 @@ http://www.imsglobal.org/xsd/imslticp_v1p0 http://www.imsglobal.org/xsd/lti/ltiv
         <lticm:property name="icon_url"></lticm:property>
         <lticm:property name="secure_icon_url"></lticm:property>
     </blti:extensions>
+    <blti:extensions platform="canvas.instructure.com">
+        <lticm:options name="assignment_selection">
+           <lticm:property name="message_type">ContentItemSelectionRequest</lticm:property>
+           <lticm:property name="url"></lticm:property>
+        </lticm:options>
+        <lticm:property name="icon_url"></lticm:property>
+        <lticm:property name="selection_height">500</lticm:property>
+        <lticm:property name="selection_width">500</lticm:property>
+    </blti:extensions>
     <blti:launch_url></blti:launch_url>
     <blti:secure_launch_url></blti:secure_launch_url>
     <blti:icon></blti:icon>

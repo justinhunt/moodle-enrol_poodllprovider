@@ -433,6 +433,18 @@ class helper {
     }
 
     /**
+     * Returns the url to get selectable items.
+     *
+     * @param int $toolid the id of the shared tool
+     * @return \moodle_url the url to launch the tool
+     * @since Moodle 3.2
+     */
+    public static function get_contentitemselection_url($toolid) {
+        return new \moodle_url('/enrol/poodllprovider/tool.php', array('id' => $toolid));
+    }
+
+
+    /**
      * Returns the name of the poodllprovider enrolment instance, or the name of the course/module being shared.
      *
      * @param \stdClass $tool The lti tool
@@ -617,6 +629,8 @@ class helper {
         $title = self::get_name($tool);
         $launchurl = self::get_launch_url($toolid);
         $launchurl = $launchurl->out(false);
+        $contentitemselectionurl = self::get_contentitemselection_url($toolid);
+        $contentitemselectionurl = $contentitemselectionurl->out(false);
         $iconurl = self::get_icon($tool);
         $iconurl = $iconurl->out(false);
         $securelaunchurl = null;
@@ -637,7 +651,8 @@ class helper {
                     "/blti:description" => $description,
                     "/blti:extensions" => array(
                             "/lticm:property[@name='icon_url']" => $iconurl,
-                            "/lticm:property[@name='secure_icon_url']" => $secureiconurl
+                            "/lticm:property[@name='secure_icon_url']" => $secureiconurl,
+                            "/lticm:property[@name='url']" => $contentitemselectionurl //canvas contentitemselection url
                         ),
                     "/blti:launch_url" => $launchurl,
                     "/blti:secure_launch_url" => $securelaunchurl,

@@ -652,7 +652,10 @@ class helper {
                     "/blti:extensions" => array(
                             "/lticm:property[@name='icon_url']" => $iconurl,
                             "/lticm:property[@name='secure_icon_url']" => $secureiconurl,
-                            "/lticm:property[@name='url']" => $contentitemselectionurl //canvas contentitemselection url
+                            "/lticm:options"=>array(
+                                    "/lticm:property[@name='url']" => $contentitemselectionurl, //canvas contentitemselection url
+                                    "/lticm:property[@name='icon_url']" => $iconurl
+                            )
                         ),
                     "/blti:launch_url" => $launchurl,
                     "/blti:secure_launch_url" => $securelaunchurl,

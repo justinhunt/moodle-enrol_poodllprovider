@@ -19,3 +19,9 @@
 .enrol_poodllprovider_activityitems {
     width: 100%;
 }
+
+@media (min-width: 576px) {
+    #page-enrol-poodllprovider-tool .modal-dialog.modal-lg {
+        max-width: 574px;
+    }
+}

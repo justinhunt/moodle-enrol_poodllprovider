@@ -275,28 +275,44 @@ class external extends \external_api {
             print_error('invalidaction');
         }
 
-        $modmoodleform = "$CFG->dirroot/mod/$module->name/mod_form.php";
-        if (file_exists($modmoodleform)) {
-            require_once($modmoodleform);
-        } else {
-            print_error('noformdesc');
+        $poodllforms =['readaloud','minilesson','wordcards'];
+        $otherforms = ['assign','quiz','page'];
+        $mformclassname = 'mod_'.$module->name.'_mod_form';
+        $mform=false;
+
+        //build a form. Poodll form constructors work with ajax data
+        //regular plugins, require us to subclass them with a new constructor (mod_forms.php)..
+        //.. then cast them to the original form once created
+        if(in_array($module->name,$poodllforms)) {
+            $modmoodleform = "$CFG->dirroot/mod/$module->name/mod_form.php";
+            if (file_exists($modmoodleform)) {
+                require_once($modmoodleform);
+                $mform = new $mformclassname($data, $cw->section, $cm, $course, $formdata);
+            } else {
+                print_error('noformdesc');
+            }
+        }else if(in_array($module->name,$otherforms)){
+            require_once("$CFG->dirroot/enrol/poodllprovider/mod_forms.php");
+            $ajaxformclassname = 'ajax_' . $mformclassname;
+            $mform = new $ajaxformclassname($data, $cw->section, $cm, $course, $formdata);
         }
 
-        $mformclassname = 'mod_'.$module->name.'_mod_form';
-        $mform = new $mformclassname($data, $cw->section, $cm, $course, $formdata);
+        if(!$mform){
+            print_error('invaliddata');
+        }else {
 
-        if ($fromform = $mform->get_data()) {
-            if (!empty($fromform->update)) {
-                list($cm, $fromform) = update_moduleinfo($cm, $fromform, $course, $mform);
-            } else if (!empty($fromform->add)) {
-                $fromform = add_moduleinfo($fromform, $course, $mform);
+            if ($fromform = $mform->get_data()) {
+                if (!empty($fromform->update)) {
+                    list($cm, $fromform) = update_moduleinfo($cm, $fromform, $course, $mform);
+                } else if (!empty($fromform->add)) {
+                    $fromform = add_moduleinfo($fromform, $course, $mform);
+                } else {
+                    print_error('invaliddata');
+                }
             } else {
                 print_error('invaliddata');
             }
-        } else {
-            print_error('invaliddata');
+            return $fromform->coursemodule;
         }
-
-        return $fromform->coursemodule;
     }
 }

@@ -107,10 +107,11 @@ define([
         }
         // Get the content of the modal.
         var params = {
+            ltimodulename: module,
             cmid: cmid,
             jsonformdata: JSON.stringify(formdata)
         };
-        return Fragment.loadFragment('enrol_poodllprovider', module + '_form', contextid, params);
+        return Fragment.loadFragment('enrol_poodllprovider', 'ltimodule_form', contextid, params);
     };
 
     /**
@@ -232,7 +233,8 @@ define([
         }])[0]
         .then(function(data) {
             if (data !== '') {
-                $('section.activity-list.sections.collapse.show .row.activity:last').after(data);
+                //$('section.activity-list.sections.collapse.show .row.activity:last').after(data);
+                $('section.activity-list.sections.collapse.show .enrol_poodllprovider_activityitems').append(data);
             }
         });
     };

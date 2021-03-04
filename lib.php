@@ -472,6 +472,18 @@ function enrol_poodllprovider_output_fragment_new_group_form($args) {
 
     return $o;
 }
+
+/**
+ * Serve the new readaloud form as a fragment.
+ *
+ * @param array $args List of named arguments for the fragment loader.
+ * @return string
+ */
+function enrol_poodllprovider_output_fragment_ltimodule_form($args) {
+    $theargs = (object) $args;
+    return mod_form_output($args, $theargs->ltimodulename);
+}
+
 /**
  * Serve the new readaloud form as a fragment.
  *
@@ -497,8 +509,8 @@ function enrol_poodllprovider_output_fragment_wordcards_form($args) {
  * @param array $args List of named arguments for the fragment loader.
  * @return string
  */
-function enrol_poodllprovider_output_fragment_poodlltime_form($args) {
-    return mod_form_output($args, 'poodlltime');
+function enrol_poodllprovider_output_fragment_minilesson_form($args) {
+    return mod_form_output($args, 'minilesson');
 }
 
 /**

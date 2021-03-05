@@ -95,3 +95,4 @@ $string['modtypes'] = 'Module types';
 $string['teachercanmanageactivities'] = 'Teacher can add/edit activities';
 $string['delete'] = 'Delete';
 $string['deleteconfirm'] = 'Do you really want to delete?';
+$string['modtypes'] = 'Enable Activities';

@@ -112,7 +112,11 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         $data->timecreated = time();
         $data->timemodified = $data->timecreated;
         foreach ($fields as $field => $value) {
-            $data->$field = $value;
+            if($field=='modtypes') {
+                $data->$field = implode(',',$value);
+            }else {
+                $data->$field = $value;
+            }
         }
 
         $DB->insert_record('enrol_pp_tools', $data);
@@ -145,7 +149,11 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         $tool->id = $data->toolid;
         $tool->timemodified = time();
         foreach ($fields as $field => $value) {
-            $tool->$field = $value;
+            if($field=='modtypes') {
+                $tool->$field = implode(',',$value);
+            }else {
+                $tool->$field = $value;
+            }
         }
 
         return $DB->update_record('enrol_pp_tools', $tool);
@@ -350,7 +358,9 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
             $mform->addElement('hidden', 'toolid');
             $mform->setType('toolid', PARAM_INT);
             $mform->setConstant('toolid', $ltitool->id);
-
+            if($ltitool && !empty($ltitool->modtypes)){
+                $ltitool->modtypes=explode(',',$ltitool->modtypes);
+            }
             $mform->setDefaults((array) $ltitool);
         }
     }

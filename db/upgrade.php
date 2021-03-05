@@ -45,7 +45,7 @@ function xmldb_enrol_poodllprovider_upgrade($oldversion) {
 
         // Define field instanceid to be added to enrol_paypal.
         // For some reason, some Moodle instances that are upgraded from old versions do not have this field.
-        $table = new xmldb_table('enrol_poodllprovider');
+        $table = new xmldb_table('enrol_pp_tools');
         $field = new xmldb_field('modtypes', XMLDB_TYPE_TEXT, null, null, null, null);
 
         // Conditionally launch add field instanceid.

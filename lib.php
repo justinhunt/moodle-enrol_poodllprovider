@@ -240,6 +240,13 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
             $tools[$mod->context->id] = format_string($mod->name);
         }
 
+        $modtypes = get_config('enrol_poodllprovider', 'modtypes');
+        $choices = \enrol_poodllprovider\helper::fetch_modtypes();
+        $themodtypes = $mform->addElement('select', 'modtypes',
+                get_string('modtypes','enrol_poodllprovider'), $choices);
+        $themodtypes->setMultiple(true);
+        $mform->setDefault('modtypes', $modtypes);
+
         $mform->addElement('select', 'contextid', get_string('tooltobeprovided', 'enrol_poodllprovider'), $tools);
         $mform->setDefault('contextid', $context->id);
 
@@ -313,12 +320,6 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         $mform->addElement('select', 'maildisplay', get_string('emaildisplay'), $choices);
         $mform->setDefault('maildisplay', $emaildisplay);
         $mform->addHelpButton('maildisplay', 'emaildisplay');
-
-        $modtypes = get_config('enrol_poodllprovider', 'modtypes');
-        $choices = \enrol_poodllprovider\helper::fetch_modtypes();
-        $themodtypes = $mform->addElement('select', 'modtypes', get_string('modtypes'), $choices);
-        $themodtypes->setMultiple(true);
-        $mform->setDefault('modtypes', $modtypes);
 
         $city = get_config('enrol_poodllprovider', 'city');
         $mform->addElement('text', 'city', get_string('city'), 'maxlength="100" size="25"');

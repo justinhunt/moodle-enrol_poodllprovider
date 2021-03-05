@@ -260,7 +260,13 @@ class tool_provider extends ToolProvider {
 
         $teachercanmanage = $cfg->teachercanmanageactivities;
 
-        foreach (explode(',', $cfg->modtypes) as $modname) {
+        //loop through enabled modtypes
+        if(!empty($thetool->modtypes)){
+            $usemodtypes=$thetool->modtypes;
+        }else{
+            $usemodtypes=$cfg->modtypes;
+        }
+        foreach (explode(',', $usemodtypes) as $modname) {
             $mod = new stdClass();
             $mod->modname = $modname;
             $mod->pluginname = get_string('pluginname', $modname);

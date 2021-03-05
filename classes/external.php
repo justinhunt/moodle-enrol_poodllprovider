@@ -276,7 +276,7 @@ class external extends \external_api {
         }
 
         $poodllforms =['readaloud','minilesson','wordcards'];
-        $otherforms = ['assign','quiz','page'];
+        //others are listed in mod_forms, but pretty much everything that has meaning in lti
         $mformclassname = 'mod_'.$module->name.'_mod_form';
         $mform=false;
 
@@ -291,7 +291,7 @@ class external extends \external_api {
             } else {
                 print_error('noformdesc');
             }
-        }else if(in_array($module->name,$otherforms)){
+        }else {
             require_once("$CFG->dirroot/enrol/poodllprovider/mod_forms.php");
             $ajaxformclassname = 'ajax_' . $mformclassname;
             unset($formdata['_qf__' . $mformclassname]);

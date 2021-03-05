@@ -720,4 +720,14 @@ class helper {
 
         return $cartridge->saveXML();
     }
+
+    public static function fetch_modtypes(){
+        global $DB;
+        $choices =array();
+        foreach ($DB->get_records('modules', array(), 'name ASC') as $module) {
+            $choices[$module->name] = get_string('modulename', $module->name);
+        }
+        return $choices;
+
+    }
 }

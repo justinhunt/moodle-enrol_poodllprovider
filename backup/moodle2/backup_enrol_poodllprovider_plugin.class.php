@@ -46,7 +46,7 @@ class backup_enrol_poodllprovider_plugin extends backup_enrol_plugin {
         $pptool = new backup_nested_element('pptool', array('id'), array(
             'enrolid', 'contextid', 'institution', 'lang', 'timezone', 'maxenrolled', 'maildisplay', 'city',
             'country', 'gradesync', 'gradesynccompletion', 'membersync', 'membersyncmode',  'roleinstructor',
-            'rolelearner', 'secret', 'timecreated', 'timemodified'));
+            'rolelearner', 'secret','modtypes', 'timecreated', 'timemodified'));
 
         $ppusers = new backup_nested_element('ppusers');
 

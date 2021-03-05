@@ -306,6 +306,12 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         $mform->setDefault('maildisplay', $emaildisplay);
         $mform->addHelpButton('maildisplay', 'emaildisplay');
 
+        $modtypes = get_config('enrol_poodllprovider', 'modtypes');
+        $choices = \enrol_poodllprovider\helper::fetch_modtypes();
+        $themodtypes = $mform->addElement('select', 'modtypes', get_string('modtypes'), $choices);
+        $themodtypes->setMultiple(true);
+        $mform->setDefault('modtypes', $modtypes);
+
         $city = get_config('enrol_poodllprovider', 'city');
         $mform->addElement('text', 'city', get_string('city'), 'maxlength="100" size="25"');
         $mform->setType('city', PARAM_TEXT);
@@ -333,6 +339,8 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         $mform->setType('institution', core_user::get_property_type('institution'));
         $mform->setDefault('institution', $institution);
         $mform->setAdvanced('institution');
+
+
 
         // Check if we are editing an instance.
         if (!empty($instance->id)) {

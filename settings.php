@@ -73,7 +73,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configtext('enrol_poodllprovider/institution', get_string('institution'), '', ''));
 
     // Mod selector.
-    $choices = array();
+    $choices = \enrol_poodllprovider\helper::fetch_modtypes();
     $icons = array();
     foreach ($DB->get_records('modules', array(), 'name ASC') as $module) {
         $choices[$module->name] = get_string('modulename', $module->name);
@@ -84,7 +84,7 @@ if ($ADMIN->fulltree) {
             'enrol_poodllprovider/modtypes',
             get_string('modtypes', 'enrol_poodllprovider'),
             '',
-            array('readaloud' => 1, 'wordcards' => 1, 'poodlltime' => 1),
+            array('readaloud' => 1, 'wordcards' => 1, 'minilesson' => 1),
             $choices
         )
     );

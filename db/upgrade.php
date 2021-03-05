@@ -37,22 +37,25 @@
  * @return boolean
  */
 function xmldb_enrol_poodllprovider_upgrade($oldversion) {
-    global $CFG;
+    global $CFG, $DB;
 
-    // Automatically generated Moodle v3.5.0 release upgrade line.
-    // Put any upgrade step following this.
+    $dbman = $DB->get_manager();
 
-    // Automatically generated Moodle v3.6.0 release upgrade line.
-    // Put any upgrade step following this.
+    if ($oldversion < 2021030100) {
 
-    // Automatically generated Moodle v3.7.0 release upgrade line.
-    // Put any upgrade step following this.
+        // Define field instanceid to be added to enrol_paypal.
+        // For some reason, some Moodle instances that are upgraded from old versions do not have this field.
+        $table = new xmldb_table('enrol_poodllprovider');
+        $field = new xmldb_field('modtypes', XMLDB_TYPE_TEXT, null, null, null, null);
 
-    // Automatically generated Moodle v3.8.0 release upgrade line.
-    // Put any upgrade step following this.
+        // Conditionally launch add field instanceid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
 
-    // Automatically generated Moodle v3.9.0 release upgrade line.
-    // Put any upgrade step following this.
+        // Paypal savepoint reached.
+        upgrade_plugin_savepoint(true, 2021030100, 'enrol', 'poodllprovider');
+    }
 
     return true;
 }

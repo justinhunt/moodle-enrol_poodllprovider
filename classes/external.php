@@ -283,6 +283,8 @@ class external extends \external_api {
         //build a form. Poodll form constructors work with ajax data
         //regular plugins, require us to subclass them with a new constructor (mod_forms.php)..
         //.. then change the incoming form name in the data, so the form get_data works properly
+error_log('modname:');
+error_log($module->name);
         if(in_array($module->name,$poodllforms)) {
             $modmoodleform = "$CFG->dirroot/mod/$module->name/mod_form.php";
             if (file_exists($modmoodleform)) {
@@ -296,10 +298,15 @@ class external extends \external_api {
             $ajaxformclassname = 'ajax_' . $mformclassname;
             unset($formdata['_qf__' . $mformclassname]);
             $formdata['_qf__' . $ajaxformclassname]=1;
+error_log('ajaxname:');
+error_log($ajaxformclassname);
+error_log('formdata:');
+error_log($formdata);
             $mform = new $ajaxformclassname($data, $cw->section, $cm, $course, $formdata);
         }
 
         if(!$mform){
+error_log('ouch');
             print_error('invaliddata');
         }else {
 
@@ -312,6 +319,7 @@ class external extends \external_api {
                     print_error('invaliddata');
                 }
             } else {
+error_log('doubleouch');
                 print_error('invaliddata');
             }
             return $fromform->coursemodule;

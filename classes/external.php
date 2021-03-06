@@ -283,10 +283,8 @@ class external extends \external_api {
         //build a form. Poodll form constructors work with ajax data
         //regular plugins, require us to subclass them with a new constructor (mod_forms.php)..
         //.. then change the incoming form name in the data, so the form get_data works properly
-error_log('modname:');
-error_log($module->name);
+
         if(in_array($module->name,$poodllforms)) {
-error_log('it was in poodll forms:');
             $modmoodleform = "$CFG->dirroot/mod/$module->name/mod_form.php";
             if (file_exists($modmoodleform)) {
                 require_once($modmoodleform);
@@ -295,21 +293,14 @@ error_log('it was in poodll forms:');
                 print_error('noformdesc');
             }
         }else {
-error_log('it was NOT in poodll forms:');
             require_once("$CFG->dirroot/enrol/poodllprovider/mod_forms.php");
-error_log('we have everything that we require:');
             $ajaxformclassname = 'ajax_' . $mformclassname;
             unset($formdata['_qf__' . $mformclassname]);
             $formdata['_qf__' . $ajaxformclassname]=1;
-error_log('ajaxname:');
-error_log($ajaxformclassname);
-error_log('formdata:');
-error_log($formdata);
             $mform = new $ajaxformclassname($data, $cw->section, $cm, $course, $formdata);
         }
 
         if(!$mform){
-error_log('ouch');
             print_error('invaliddata');
         }else {
 
@@ -319,11 +310,9 @@ error_log('ouch');
                 } else if (!empty($fromform->add)) {
                     $fromform = add_moduleinfo($fromform, $course, $mform);
                 } else {
-error_log('triple ouch');
                     print_error('invaliddata');
                 }
             } else {
-error_log('doubleouch');
                 print_error('invaliddata');
             }
             return $fromform->coursemodule;

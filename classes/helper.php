@@ -724,7 +724,14 @@ class helper {
     public static function fetch_modtypes(){
         global $DB;
         $choices =array();
-        foreach ($DB->get_records('modules', array(), 'name ASC') as $module) {
+        //for pulling all from DB
+        //$choicekeys =$DB->get_records('modules', array(), 'name ASC') ;
+
+        //for using the ones we prepared. You need to add new ones to mod_forms.php
+        $choicekeys =['assign','book','chat','choice','englishcentral','feedback','forum','glossary','label','lesson','minilesson',
+                'page', 'quiz','readaloud','solo','survey','wiki','wordcards','workshop'];
+
+        foreach ( $choicekeys as $module) {
             $choices[$module->name] = get_string('modulename', $module->name);
         }
         return $choices;

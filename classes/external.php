@@ -286,6 +286,7 @@ class external extends \external_api {
 error_log('modname:');
 error_log($module->name);
         if(in_array($module->name,$poodllforms)) {
+error_log('it was in poodll forms:');
             $modmoodleform = "$CFG->dirroot/mod/$module->name/mod_form.php";
             if (file_exists($modmoodleform)) {
                 require_once($modmoodleform);
@@ -294,7 +295,9 @@ error_log($module->name);
                 print_error('noformdesc');
             }
         }else {
+error_log('it was NOT in poodll forms:');
             require_once("$CFG->dirroot/enrol/poodllprovider/mod_forms.php");
+error_log('we have everything that we require:');
             $ajaxformclassname = 'ajax_' . $mformclassname;
             unset($formdata['_qf__' . $mformclassname]);
             $formdata['_qf__' . $ajaxformclassname]=1;
@@ -316,6 +319,7 @@ error_log('ouch');
                 } else if (!empty($fromform->add)) {
                     $fromform = add_moduleinfo($fromform, $course, $mform);
                 } else {
+error_log('triple ouch');
                     print_error('invaliddata');
                 }
             } else {

@@ -275,16 +275,40 @@ class external extends \external_api {
             print_error('invalidaction');
         }
 
-        $poodllforms =['readaloud','minilesson','wordcards'];
+        //build a form. Poodll short form constructors (poodllshortforms) just take a name attribute and thats it
+        //they have a tab for the real conten
+        $poodllshortforms =['readaloud','minilesson','wordcards','solo','pchat','englishcentral'];
+        if(in_array($module->name,$poodllshortforms)) {
+            $mform = new \enrol_poodllprovider\shortmodform();
+            if ($fromform = $mform->get_data()) {
+                if(!empty($fromform->add)) {
+                    $fromform = helper::fetch_extrafields($fromform);
+                    $fromform = add_moduleinfo($fromform, $course);
+                    return $fromform->coursemodule;
+                } else {
+                    print_error('invaliddata');
+                }
+            } else {
+                print_error('invaliddata');
+            }
+        }
+
+
+
+        //build a form. Poodll form constructors (poodlllongforms) work with ajax data, so we do not need to do any messing around.
+        //they been a bit superceded by poodll short forms, but we may need to roll back.
+        // And actually theajax trick for regular forms might be sufficient
+        //
+        //regular plugins, require us to subclass them with a new constructor (mod_forms.php)..
+        //.. then change the incoming form name in the data, so the form get_data works properly
+
+        $poodlllongforms =['readaloud','minilesson','wordcards','solo','pchat','englishcentral'];
         //others are listed in mod_forms, but pretty much everything that has meaning in lti
         $mformclassname = 'mod_'.$module->name.'_mod_form';
         $mform=false;
 
-        //build a form. Poodll form constructors work with ajax data
-        //regular plugins, require us to subclass them with a new constructor (mod_forms.php)..
-        //.. then change the incoming form name in the data, so the form get_data works properly
 
-        if(in_array($module->name,$poodllforms)) {
+        if(in_array($module->name,$poodlllongforms)) {
             $modmoodleform = "$CFG->dirroot/mod/$module->name/mod_form.php";
             if (file_exists($modmoodleform)) {
                 require_once($modmoodleform);

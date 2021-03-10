@@ -737,4 +737,75 @@ class helper {
         return $choices;
 
     }
+
+
+    /*
+     *  Pad out the almost empty form data from the activity short form for Poodll mods with default data;
+     *
+     */
+    public static function fetch_extrafields($fromform){
+        switch ($fromform->modulename){
+            case 'readaloud':
+                $fromform->intro='';
+                $fromform->timelimit=60;
+                $fromform->passage='';
+                $fromform->alternatives='';
+                $fromform->welcome='Please read the following passage aloud.';
+                $fromform->feedback='Thanks for reading. Please be patient until your attempt has been evaluated.';
+                $fromform->targetwpm=100;
+                $fromform->allowearlyexit=0;
+                $fromform->enablepreview=1;
+                $fromform->enableshadow=0;
+                $fromform->enablelandr=1;
+                $fromform->maxattempts=0;
+                $fromform->sessionscoremethod=0;
+                $fromform->machgrademethod=1;
+                $fromform->recorder='once';
+                $fromform->enableai=1;
+                $fromform->ttslanguage='en-US';
+                $fromform->ttsvoice='Amy';
+                $fromform->ttsspeed=1;
+                $fromform->transcriber=1;
+                $fromform->region='useast1';
+                $fromform->expiredays=365;
+                $fromform->accadjustmethod=0;
+                $fromform->accadjust=0;
+                $fromform->submitrawaudio=0;
+                $fromform->stricttranscribe=0;
+                $fromform->activitylink=0;
+                $fromform->humanpostattempt=2;
+                $fromform->grade=100;
+                $fromform->gradecat=1;
+                $fromform->grade_rescalegrades=null;
+                $fromform->gradepass=null;
+                $fromform->gradeoptions=2;
+                $fromform->visible=1;
+                $fromform->visibleoncoursepage= 1;
+                $fromform->cmidnumber = '';
+                $fromform->groupmode =0;
+                $fromform->availabilityconditionsjson = '{"op":"&","c":[],"showc":[]}' ;
+                $fromform->completionunlocked =1;
+                $fromform->completion =1;
+                $fromform->completionexpected = 0;
+                $fromform->tags = [];
+                $fromform->course = 2;
+                $fromform->coursemodule = 0;
+                $fromform->section = 0;
+                $fromform->module = 24;
+                $fromform->modulename = 'readaloud';
+                $fromform->instance = 0;
+                $fromform->add ='readaloud';
+                $fromform->update =0;
+                $fromform->return =  0;
+                $fromform->sr = 0;
+                $fromform->competency_rule =  '0';
+                $fromform->submitbutton ='Save and display';
+                break;
+
+            default:
+        }
+        return $fromform;
+
+    }
+
 }

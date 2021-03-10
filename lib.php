@@ -500,40 +500,64 @@ function enrol_poodllprovider_output_fragment_new_group_form($args) {
  */
 function enrol_poodllprovider_output_fragment_ltimodule_form($args) {
     $theargs = (object) $args;
-    return mod_form_output($args, $theargs->ltimodulename);
-}
+    switch($theargs->ltimodulename){
+        case 'englishcentral':
+        case 'minilesson':
+        case 'pchat':
+        case 'readaloud':
+        case 'solo':
+        case 'wordcards':
+            return mod_shortform_output($args, $theargs->ltimodulename);
 
-/**
- * Serve the new readaloud form as a fragment.
- *
- * @param array $args List of named arguments for the fragment loader.
- * @return string
- */
-function enrol_poodllprovider_output_fragment_readaloud_form($args) {
-    return mod_form_output($args, 'readaloud');
-}
+        default:
+            return mod_form_output($args, $theargs->ltimodulename);
+    }
 
-/**
- * Serve the new wordcards form as a fragment.
- *
- * @param array $args List of named arguments for the fragment loader.
- * @return string
- */
-function enrol_poodllprovider_output_fragment_wordcards_form($args) {
-    return mod_form_output($args, 'wordcards');
-}
-/**
- * Serve the new group form as a fragment.
- *
- * @param array $args List of named arguments for the fragment loader.
- * @return string
- */
-function enrol_poodllprovider_output_fragment_minilesson_form($args) {
-    return mod_form_output($args, 'minilesson');
 }
 
 /**
  * Render module form
+ *
+ * @param $args
+ * @param $modname
+ * @return string
+ * @throws moodle_exception
+ */
+function mod_shortform_output($args, $modname) {
+    global $CFG;
+
+    $args = (object) $args;
+    $context = $args->context;
+    $cmid = $args->cmid;
+
+    list($ignored, $course) = get_context_info_array($context->id);
+
+    $section = 0;
+    $sectionreturn = null;
+
+    list($module, $contextcourse, $cw, $cm, $data) = prepare_new_moduleinfo_data($course, $modname, $section);
+    $data->return = 0;
+    $data->sr = $sectionreturn;
+    $data->add = $modname;
+    $data->modulename=$modname;
+    $data->course=$course->id;
+
+
+    $mform = new \enrol_poodllprovider\shortmodform();
+    $mform->set_data($data);
+
+
+    $o = '';
+    ob_start();
+    $mform->display();
+    $o .= ob_get_contents();
+    ob_end_clean();
+
+    return $o;
+}
+
+/**
+ * Render long module form
  *
  * @param $args
  * @param $modname

@@ -746,7 +746,7 @@ class helper {
     public static function fetch_extrafields($fromform){
 
         global $DB;
-        $themodule =$DB->get_record('modules', array('name'=>$fromform->modulename), 'name ASC') ;
+        $themodule =$DB->get_record('modules', array('name'=>$fromform->modulename)) ;
 
         switch ($fromform->modulename){
             case 'readaloud':

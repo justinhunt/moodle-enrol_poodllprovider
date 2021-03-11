@@ -271,7 +271,7 @@ class tool_provider extends ToolProvider {
             $mod->modname = $modname;
             $mod->pluginname = get_string('pluginname', $modname);
             $mod->icon = $OUTPUT->image_url('icon', $modname);
-            $mod->title = get_string('addnew', 'mod_' . $modname);
+            $mod->title = get_string('addnewmodule','enrol_poodllprovider', $mod->pluginname);
             $contentitemsdata->availablemods[] = $mod;
 
             $section = new stdClass();

@@ -281,7 +281,7 @@ class external extends \external_api {
         error_log('AAA');
         if(in_array($module->name,$poodllshortforms)) {
             error_log('BBB');
-            $mform = new \enrol_poodllprovider\shortmodform();
+            $mform = new \enrol_poodllprovider\shortmodform(null,null,'post','',null,true,$formdata);
             if ($fromform = $mform->get_data()) {
                 error_log('CCCC');
                 if(!empty($fromform->add)) {

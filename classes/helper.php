@@ -748,10 +748,10 @@ class helper {
             case 'readaloud':
                 $fromform->intro='';
                 $fromform->timelimit=60;
-                $fromform->passage='';
+                $fromform->passage_editor=['text'=>'','format'=>0];
                 $fromform->alternatives='';
-                $fromform->welcome='Please read the following passage aloud.';
-                $fromform->feedback='Thanks for reading. Please be patient until your attempt has been evaluated.';
+                $fromform->welcome_editor=['text'=>'Please read the following passage aloud.','format'=>0];
+                $fromform->feedback_editor=['text'=>'Thanks for reading. Please be patient until your attempt has been evaluated.','format'=>0];
                 $fromform->targetwpm=100;
                 $fromform->allowearlyexit=0;
                 $fromform->enablepreview=1;

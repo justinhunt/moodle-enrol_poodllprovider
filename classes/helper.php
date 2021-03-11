@@ -744,6 +744,10 @@ class helper {
      *
      */
     public static function fetch_extrafields($fromform){
+
+        global $DB;
+        $themodule =$DB->get_record('modules', array('name'=>$fromform->modulename), 'name ASC') ;
+
         switch ($fromform->modulename){
             case 'readaloud':
                 $fromform->intro='';
@@ -791,7 +795,7 @@ class helper {
                 $fromform->course = 2;
                 $fromform->coursemodule = 0;
                 $fromform->section = 0;
-                $fromform->module = 24;
+                $fromform->module = $themodule->id;
                 $fromform->modulename = 'readaloud';
                 $fromform->instance = 0;
                 $fromform->add ='readaloud';

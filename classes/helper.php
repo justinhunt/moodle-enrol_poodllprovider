@@ -743,7 +743,7 @@ class helper {
      *  Pad out the almost empty form data from the activity short form for Poodll mods with default data;
      *
      */
-    public static function fetch_extrafields($fromform){
+    public static function fetch_extrafields($fromform,$course){
 
         global $DB;
         $themodule =$DB->get_record('modules', array('name'=>$fromform->modulename)) ;
@@ -778,36 +778,149 @@ class helper {
                 $fromform->stricttranscribe=0;
                 $fromform->activitylink=0;
                 $fromform->humanpostattempt=2;
-                $fromform->grade=100;
-                $fromform->gradecat=1;
-                $fromform->grade_rescalegrades=null;
-                $fromform->gradepass=null;
+
+                break;
+
+            case "wordcards":
+                $fromform->intro='';
+                $fromform->ttslanguage='en-US';
+                $fromform->step1practicetype=1;
+                $fromform->step1termcount=4;
+                $fromform->step2practicetype=0;
+                $fromform->step3practicetype=0;
+                $fromform->step4practicetype=0;
+                $fromform->step5practicetype=0;
+
+                $fromform->maxattempts=0;
+                $fromform->skipreview=0;
+                $fromform->finishedstepmsg_editor=['text'=>'<h4 style="text-align: center;">Congratulations!</h4>','format'=>0];
+                $fromform->completedmsg_editor=['text'=>'You have completed this activity. Feel free to go back and practice more!','format'=>0];
+                $fromform->modulename = 'wordcards';
+                $fromform->add ='wordcards';
+                break;
+
+            case 'solo':
+                $fromform->intro='';
+                $fromform->speakingtopic='';
+                $fromform->addmedia=1;
+                $fromform->addiframe='';
+                $fromform->addttsaudio='';
+                $fromform->topicmedia=0;
+                $fromform->topicttsvoice='Amy';
+                $fromform->recordertype='audio';
+                $fromform->recorderskin='once';
+                $fromform->convlength=2;
+                $fromform->maxconvlength=2;
+                $fromform->targetwords='';
+                $fromform->gradewordgoal=60;
+
+                $fromform->enabletranscription=1;
+                $fromform->enableai=1;
+                $fromform->ttslanguage='en-US';
+                $fromform->transcriber=1;
+                $fromform->region='useast1';
+                $fromform->expiredays=365;
+                $fromform->multiattempts=0;
+                $fromform->postattemptedit=0;
+                $fromform->enableautograde=1;
+                $fromform->gradewordcount='totalunique';
                 $fromform->gradeoptions=2;
-                $fromform->visible=1;
-                $fromform->visibleoncoursepage= 1;
-                $fromform->cmidnumber = '';
-                $fromform->groupmode =0;
-                $fromform->availabilityconditionsjson = '{"op":"&","c":[],"showc":[]}' ;
-                $fromform->completionunlocked =1;
-                $fromform->completion =1;
-                $fromform->completionexpected = 0;
-                $fromform->tags = [];
-                $fromform->course = 2;
-                $fromform->coursemodule = 0;
-                $fromform->section = 0;
-                $fromform->module = $themodule->id;
-                $fromform->modulename = 'readaloud';
-                $fromform->instance = 0;
-                $fromform->add ='readaloud';
-                $fromform->update =0;
-                $fromform->return =  0;
-                $fromform->sr = 0;
-                $fromform->competency_rule =  '0';
-                $fromform->submitbutton ='Save and display';
+
+                $fromform->gradebasescore='';
+                $fromform->graderatioitem='';
+                $fromform->bonusdirection1='plus';
+                $fromform->bonuspoints1=3;
+                $fromform->bonus1='targetwordspoken';
+
+                $fromform->bonusdirection2='plus';
+                $fromform->bonuspoints2=3;
+                $fromform->bonus2='--';
+
+                $fromform->bonusdirection3='plus';
+                $fromform->bonuspoints3=3;
+                $fromform->bonus3='--';
+
+                $fromform->bonusdirection4='plus';
+                $fromform->bonuspoints4=3;
+                $fromform->bonus4='--';
+
+                $fromform->tips_editor=['text'=>'Speak simply and clearly.','format'=>0];
+                break;
+
+
+            case 'pchat':
+                $fromform->intro='';
+                $fromform->multiattempts=0;
+                $fromform->postattemptedit=0;
+                $fromform->convlength=7;
+                $fromform->userconvlength=1;
+                $fromform->revq1='';
+                $fromform->revq2='';
+                $fromform->revq3='';
+                $fromform->enableai=1;
+                $fromform->ttslanguage='en-US';
+                $fromform->transcriber=1;
+                $fromform->region='useast1';
+                $fromform->expiredays=365;
+                $fromform->enableautograde=1;
+                $fromform->advancedgradingmethod_pchat='';
+                $fromform->tips_editor=['text'=>'Speak simply and clearly.','format'=>0];
+                break;
+
+            case 'minilesson':
+                $fromform->intro='';
+                $fromform->pagelayout='standard';
+                $fromform->timelimit=0;
+                $fromform->showqtitles=0;
+                $fromform->maxattempts=0;
+                $fromform->ttslanguage='en-US';
+                $fromform->region='useast1';
+                $fromform->richtextprompt=0;
+                $fromform->activitylink=0;
+                break;
+
+            case 'englishcentral':
+                $fromform->intro='';
+                $fromform->activityopen=0;
+                $fromform->videoopen=0;
+                $fromform->videoclose=0;
+                $fromform->activityclose=0;
+                $fromform->watchgoal=10;
+                $fromform->learngoal=20;
+                $fromform->speakgoal=10;
+                $fromform->studygoal=90;
                 break;
 
             default:
         }
+
+        //add the common bits
+        $fromform->add =$fromform->modulename;
+        $fromform->grade=100;
+        $fromform->gradecat=1;
+        $fromform->grade_rescalegrades=null;
+        $fromform->gradepass=null;
+        $fromform->gradeoptions=2;
+        $fromform->visible=1;
+        $fromform->visibleoncoursepage= 1;
+        $fromform->cmidnumber = '';
+        $fromform->groupmode =0;
+        $fromform->availabilityconditionsjson = '{"op":"&","c":[],"showc":[]}' ;
+        $fromform->completionunlocked =1;
+        $fromform->completion =1;
+        $fromform->completionexpected = 0;
+        $fromform->tags = [];
+        $fromform->course = $course->id;
+        $fromform->coursemodule = 0;
+        $fromform->section = 0;
+        $fromform->module = $themodule->id;
+        $fromform->instance = 0;
+        $fromform->update =0;
+        $fromform->return =  0;
+        $fromform->sr = 0;
+        $fromform->competency_rule =  '0';
+        $fromform->submitbutton ='Save and display';
+
         return $fromform;
 
     }

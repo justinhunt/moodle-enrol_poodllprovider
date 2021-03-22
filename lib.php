@@ -507,6 +507,7 @@ function enrol_poodllprovider_output_fragment_ltimodule_form($args) {
         case 'readaloud':
         case 'solo':
         case 'wordcards':
+        case 'assign':
             return mod_shortform_output($args, $theargs->ltimodulename);
 
         default:

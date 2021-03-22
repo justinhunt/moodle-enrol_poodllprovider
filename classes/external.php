@@ -277,7 +277,7 @@ class external extends \external_api {
 
         //build a form. Poodll short form constructors (poodllshortforms) just take a name attribute and thats it
         //they have a tab for the real conten
-        $poodllshortforms =['readaloud','minilesson','wordcards','solo','pchat','englishcentral'];
+        $poodllshortforms =['readaloud','minilesson','wordcards','solo','pchat','englishcentral','assign'];
         if(in_array($module->name,$poodllshortforms)) {
             $mform = new \enrol_poodllprovider\shortmodform(null,null,'post','',null,true,$formdata);
             if ($fromform = $mform->get_data()) {

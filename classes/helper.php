@@ -893,6 +893,73 @@ class helper {
                 $fromform->studygoal=90;
                 break;
 
+            case 'assign':
+
+                  $fromform->introeditor = ['text'=> '','format'=> '1','itemid'=> 0];
+                  $fromform->showdescription= '0' ;
+                  $fromform->introattachments= 0;
+                  $fromform->allowsubmissionsfromdate= 0;
+                  $fromform->duedate= 0;
+                  $fromform->cutoffdate= 0;
+                  $fromform->gradingduedate= 0;
+                  $fromform->assignsubmission_cloudpoodll_enabled= '1' ;
+                  $fromform->assignsubmission_comments_enabled= 1;
+                  $fromform->assignsubmission_cloudpoodll_recordertype= 'audio' ;
+                  $fromform->assignsubmission_cloudpoodll_recorderskin= 'bmr' ;
+                  $fromform->assignsubmission_cloudpoodll_timelimit = 0;
+                  $fromform->assignsubmission_cloudpoodll_expiredays= '365' ;
+                  $fromform->assignsubmission_cloudpoodll_enabletranscode= '1' ;
+                  $fromform->assignsubmission_cloudpoodll_enabletranscription= '1' ;
+                  $fromform->assignsubmission_cloudpoodll_language= 'en-US' ;
+                  $fromform->assignsubmission_cloudpoodll_playertype= 'transcript';
+                  $fromform->assignsubmission_cloudpoodll_playertypestudent= 'transcript';
+                  $fromform->assignsubmission_cloudpoodll_audiosingledisplay= '1' ;
+                  $fromform->assignsubmission_cloudpoodll_audiolistdisplay= '0' ;
+                  $fromform->assignsubmission_cloudpoodll_videosingledisplay= '2' ;
+                  $fromform->assignsubmission_cloudpoodll_videolistdisplay= '2' ;
+                  $fromform->assignsubmission_cloudpoodll_safesave= '0' ;
+                  /*
+                  $fromform->assignsubmission_file_filetypes= '';
+                  $fromform->assignsubmission_onlinepoodll_timelimit= 0;
+                  $fromform->assignsubmission_onlinepoodll_showcurrentsubmission= '2' ;
+                  $fromform->assignsubmission_onlinepoodll_active= '1' ;
+                  $fromform->backimage= 0;
+                  $fromform->assignsubmission_onlinetext_wordlimit= '';
+                  */
+
+
+                  $fromform->assignfeedback_cloudpoodll_enabled= '1' ;
+                  $fromform->assignfeedback_cloudpoodll_recordertype= 'audio' ;
+                  $fromform->assignfeedback_cloudpoodll_recorderskin= 'bmr' ;
+                  $fromform->assignfeedback_cloudpoodll_timelimit= 0;
+                  $fromform->assignfeedback_cloudpoodll_expiredays= '365' ;
+                  $fromform->assignfeedback_cloudpoodll_enabletranscode= 1;
+                  $fromform->assignfeedback_cloudpoodll_enabletranscription= '1' ;
+                  $fromform->assignfeedback_cloudpoodll_language= 'en-US' ;
+                  $fromform->assignfeedback_cloudpoodll_playertype= 'transcript' ;
+                  $fromform->assignfeedback_cloudpoodll_playertypestudent= 'transcript' ;
+                  $fromform->assignfeedback_comments_enabled= '1' ;
+                  $fromform->assignfeedback_comments_commentinline= '0' ;
+                /*
+                  $fromform->assignfeedback_poodll_enabled= '1' ;
+                  $fromform->assignfeedback_poodll_recordertype= '0' ;
+                  $fromform->assignfeedback_poodll_downloadsok= '0' ;
+                */
+
+                  $fromform->submissiondrafts= '0' ;
+                  $fromform->requiresubmissionstatement= '0' ;
+                  $fromform->attemptreopenmethod= 'none' ;
+                  $fromform->maxattempts= '-1' ;
+                  $fromform->teamsubmission= '0' ;
+                  $fromform->preventsubmissionnotingroup= '0' ;
+                  $fromform->requireallteammemberssubmit= '0' ;
+                  $fromform->sendnotifications= '0' ;
+                  $fromform->sendlatenotifications= '0' ;
+                  $fromform->sendstudentnotifications= '0' ;
+
+                break;
+
+
             default:
         }
 

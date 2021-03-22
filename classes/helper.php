@@ -910,6 +910,7 @@ class helper {
         $fromform->completionunlocked =1;
         $fromform->completion =1;
         $fromform->completionexpected = 0;
+        $fromform->completionmingrade=0;
         $fromform->tags = [];
         $fromform->course = $course->id;
         $fromform->coursemodule = 0;

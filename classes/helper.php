@@ -905,6 +905,7 @@ class helper {
         $fromform->visibleoncoursepage= 1;
         $fromform->cmidnumber = '';
         $fromform->groupmode =0;
+        $fromform->groupingid =0;
         $fromform->availabilityconditionsjson = '{"op":"&","c":[],"showc":[]}' ;
         $fromform->completionunlocked =1;
         $fromform->completion =1;

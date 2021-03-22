@@ -783,6 +783,7 @@ class helper {
 
             case "wordcards":
                 $fromform->intro='';
+                $fromform->intro_format=0;
                 $fromform->ttslanguage='en-US';
                 $fromform->step1practicetype=1;
                 $fromform->step1termcount=4;
@@ -881,6 +882,7 @@ class helper {
 
             case 'englishcentral':
                 $fromform->intro='';
+                $fromform->intro_format=0;
                 $fromform->activityopen=0;
                 $fromform->videoopen=0;
                 $fromform->videoclose=0;

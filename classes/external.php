@@ -284,6 +284,7 @@ class external extends \external_api {
                 if(!empty($fromform->add)) {
                     $fromform = helper::fetch_extrafields($fromform,$course);
                     $fromform = add_moduleinfo($fromform, $course);
+                    error_log(print_r($fromform,true));
                     return $fromform->coursemodule;
                 } else {
                     print_error('invaliddata');

@@ -261,8 +261,8 @@ class tool_provider extends ToolProvider {
         $teachercanmanage = $cfg->teachercanmanageactivities;
 
         //loop through enabled modtypes
-        if(!empty($thetool->modtypes)){
-            $usemodtypes=$thetool->modtypes;
+        if(!empty($this->tool->modtypes)){
+            $usemodtypes=$this->tool->modtypes;
         }else{
             $usemodtypes=$cfg->modtypes;
         }
@@ -280,7 +280,7 @@ class tool_provider extends ToolProvider {
             $section->items = $formdataitems[$modname] ?? null;
             $section->icon = $mod->icon;
             $section->contextid = $coursecontext->id;
-            $section->itemnumber = $thetool->id;
+            $section->itemnumber = $this->tool->id;
             $section->teachercanmanage = $teachercanmanage;
 
             $contentitemsdata->sections[] = $section;

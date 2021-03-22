@@ -956,6 +956,9 @@ class helper {
                   $fromform->sendnotifications= '0' ;
                   $fromform->sendlatenotifications= '0' ;
                   $fromform->sendstudentnotifications= '0' ;
+                  $fromform->blindmarking = 0;
+                  $fromform->markingworkflow = 0;
+                  $fromform->markingallocation = 0;
 
                 break;
 

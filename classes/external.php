@@ -283,8 +283,8 @@ class external extends \external_api {
             if ($fromform = $mform->get_data()) {
                 if(!empty($fromform->add)) {
                     error_log('AAAAA');
-                    error_log(print_r($fromform,true));
                     $fromform = helper::fetch_extrafields($fromform,$course);
+                    error_log(print_r($fromform,true));
                     $fromform = add_moduleinfo($fromform, $course);
                     return $fromform->coursemodule;
                 } else {

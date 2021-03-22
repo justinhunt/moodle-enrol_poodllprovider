@@ -243,7 +243,7 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         $modtypes = get_config('enrol_poodllprovider', 'modtypes');
         $choices = \enrol_poodllprovider\helper::fetch_modtypes();
         $themodtypes = $mform->addElement('select', 'modtypes',
-                get_string('modtypes','enrol_poodllprovider'), $choices);
+                get_string('modtypes','enrol_poodllprovider'), $choices,array('size'=>8));
         $themodtypes->setMultiple(true);
         $mform->setDefault('modtypes', $modtypes);
 

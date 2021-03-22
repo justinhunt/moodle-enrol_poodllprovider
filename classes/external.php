@@ -282,14 +282,20 @@ class external extends \external_api {
             $mform = new \enrol_poodllprovider\shortmodform(null,null,'post','',null,true,$formdata);
             if ($fromform = $mform->get_data()) {
                 if(!empty($fromform->add)) {
+                    error_log('AAAAA');
                     $fromform = helper::fetch_extrafields($fromform,$course);
                     $fromform = add_moduleinfo($fromform, $course);
+                    error_log('DDDDD');
                     error_log(print_r($fromform,true));
                     return $fromform->coursemodule;
                 } else {
+                    error_log('CCCCC');
+                    error_log(print_r($fromform,true));
                     print_error('invaliddata');
                 }
             } else {
+                error_log('BBBBB');
+                error_log(print_r($fromform,true));
                 print_error('invaliddata');
             }
         }

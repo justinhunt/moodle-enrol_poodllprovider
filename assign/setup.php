@@ -98,22 +98,30 @@ if ($mform->is_cancelled()) {
 }
 
 //if we got here we are loading up data
-//attachments
 $ctx = context_module::instance($cm->id);
 $assignment = new assign($ctx, null, null);
 $assignment->set_course($course);
-
-$draftitemid = file_get_submitted_draft_itemid('introattachments');
-file_prepare_draft_area($draftitemid, $ctx->id, 'mod_assign', ASSIGN_INTROATTACHMENT_FILEAREA,
-        0, array('subdirs' => 0));
-$defaultvalues['introattachments'] = $draftitemid;
-
-$assignment->plugin_data_preprocessing($defaultvalues);
-
+$filerelatedvalues =[];
 $moduleinstance->n =$moduleinstance->id;
 $formdata = (array)$moduleinstance;
+
+
+//intro editor
+$draftitemid_editor = file_get_submitted_draft_itemid('introeditor');
+$currentintro = file_prepare_draft_area($draftitemid_editor, $ctx->id, 'mod_'.$data->modulename,
+        'intro', 0, array('subdirs'=>true), $moduleinstance->intro);
+$formdata->introeditor = array('text'=>$currentintro, 'format'=>$moduleinstance->introformat, 'itemid'=>$draftitemid_editor);
+
+//attachments
+$draftitemid_attachments = file_get_submitted_draft_itemid('introattachments');
+file_prepare_draft_area($draftitemid_attachments, $ctx->id, 'mod_assign', ASSIGN_INTROATTACHMENT_FILEAREA,
+        0, array('subdirs' => 0));
 $formdata['introattachments'] = $draftitemid;
-$formdata['introeditor']= ['text'=>$data->intro,'format'=>$data->format];
+
+//plugins
+$filerelatedvalues['introattachments'] = $draftitemid_attachments;
+$assignment->plugin_data_preprocessing($filerelatedvalues);
+
 $mform->set_data($formdata);
 
 echo $renderer->setup_header($moduleinstance, $modulecontext, $id);

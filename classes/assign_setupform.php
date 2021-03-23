@@ -130,7 +130,7 @@ class assign_setupform extends \moodleform {
         $assignment->set_course($course);
         $config = get_config('assign');
         $assignment->add_all_plugin_settings($mform);
-        
+
 
         //add the action buttons
         $this->add_action_buttons(get_string('cancel'), get_string('savechangesanddisplay'));

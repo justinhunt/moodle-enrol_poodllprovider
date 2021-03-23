@@ -100,4 +100,27 @@ class mod_assign_renderer extends \mod_assign_renderer {
 
         return $o;
     }
+
+    public function setup_header($moduleinstance, $context){
+        global $CFG;
+
+        $o = '';
+        $this->page->set_title(get_string('pluginname', 'assign'));
+        $this->page->set_heading($this->page->course->fullname);
+
+        $o .= $this->output->header();
+        $heading = format_string($moduleinstance->name, false, array('context' => $context));
+
+        $o .= $this->output->heading($heading);
+        if (has_capability('mod/assign:addinstance',  $context)) {
+            $currenttab='setup';
+            ob_start();
+            include($CFG->dirroot.'/enrol/poodllprovider/assign/tabs.php');
+            $o .= ob_get_contents();
+            ob_end_clean();
+
+        }
+        return $o;
+    }
+
 }

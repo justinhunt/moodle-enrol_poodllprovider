@@ -71,10 +71,11 @@ if ($mform->is_cancelled()) {
     redirect($redirecturl);
     exit;
 }else if ($data = $mform->get_data()) {
+
     $data->timemodified = time();
     $data->id = $data->n;
     $data->coursemodule = $cm->id;
-    $data = assign_process_files($data);
+    //$data = assign_process_files($data);
 
     //now update the db once we have saved files and stuff
     if ($DB->update_record($modname, $data)) {
@@ -89,6 +90,6 @@ if ($mform->is_cancelled()) {
 $moduleinstance->n =$moduleinstance->id;
 $mform->set_data((array)$moduleinstance);
 
-echo $renderer->header($moduleinstance, $cm, "setup");
+echo $renderer->setup_header($moduleinstance, $modulecontext);
 $mform->display();
 echo $renderer->footer();

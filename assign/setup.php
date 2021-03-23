@@ -76,9 +76,9 @@ if ($mform->is_cancelled()) {
     redirect($redirecturl);
     exit;
 }else if ($data = $mform->get_data()) {
-
+print_r($data);
+die;
     $data->timemodified = time();
-    $data->id = $data->n;
     $data->coursemodule = $cm->id;
     //$data = assign_process_files($data);
 

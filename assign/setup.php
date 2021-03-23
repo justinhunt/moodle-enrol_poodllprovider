@@ -113,6 +113,7 @@ $assignment->plugin_data_preprocessing($defaultvalues);
 $moduleinstance->n =$moduleinstance->id;
 $formdata = (array)$moduleinstance;
 $formdata['introattachments'] = $draftitemid;
+$formdata['introeditor']= ['text'=>$data->intro,'format'=>$data->format];
 $mform->set_data($formdata);
 
 echo $renderer->setup_header($moduleinstance, $modulecontext, $id);

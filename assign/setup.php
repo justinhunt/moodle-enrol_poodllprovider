@@ -90,6 +90,6 @@ if ($mform->is_cancelled()) {
 $moduleinstance->n =$moduleinstance->id;
 $mform->set_data((array)$moduleinstance);
 
-echo $renderer->setup_header($moduleinstance, $modulecontext);
+echo $renderer->setup_header($moduleinstance, $modulecontext, $id);
 $mform->display();
 echo $renderer->footer();

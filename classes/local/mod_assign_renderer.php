@@ -101,7 +101,7 @@ class mod_assign_renderer extends \mod_assign_renderer {
         return $o;
     }
 
-    public function setup_header($moduleinstance, $context){
+    public function setup_header($moduleinstance, $context, $coursemoduleid){
         global $CFG;
 
         $o = '';
@@ -114,6 +114,9 @@ class mod_assign_renderer extends \mod_assign_renderer {
         $o .= $this->output->heading($heading);
         if (has_capability('mod/assign:addinstance',  $context)) {
             $currenttab='setup';
+            $header = new \stdClass();
+            $header->context = $context;
+            $header->coursemoduleid = $coursemoduleid;
             ob_start();
             include($CFG->dirroot.'/enrol/poodllprovider/assign/tabs.php');
             $o .= ob_get_contents();

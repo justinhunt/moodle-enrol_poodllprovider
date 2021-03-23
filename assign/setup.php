@@ -78,7 +78,14 @@ if ($mform->is_cancelled()) {
 }else if ($data = $mform->get_data()) {
 
     $data->timemodified = time();
+    $data->instance = $data->id;
     $data->coursemodule = $cm->id;
+    foreach ($moduleinstance as $key => $value) {
+        if(!isset($data->{$key})){
+            $data->{$key}=$value;
+        }
+    }
+
     //$data = assign_process_files($data);
 
     //now update the db once we have saved files and stuff

@@ -241,7 +241,11 @@ class tool_provider extends ToolProvider {
 
             $context = context::instance_by_id($thetool->contextid);
             if ($context->contextlevel == CONTEXT_MODULE) {
-                $cm = get_coursemodule_from_id('', $context->instanceid, $thetool->courseid, false, MUST_EXIST);
+                $cm = get_coursemodule_from_id('', $context->instanceid, $thetool->courseid, false,IGNORE_MISSING);
+
+                //if this module was deleted forcefully it might be missing. Move on
+                if(!$cm){continue;}
+
                 $fdata['cmid'] = $cm->id;
                 $fdata['modname'] = $cm->modname;
                 $fdata = (object) $fdata;

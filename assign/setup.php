@@ -108,9 +108,9 @@ $formdata = (array)$moduleinstance;
 
 //intro editor
 $draftitemid_editor = file_get_submitted_draft_itemid('introeditor');
-$currentintro = file_prepare_draft_area($draftitemid_editor, $ctx->id, 'mod_'.$data->modulename,
+$currentintro = file_prepare_draft_area($draftitemid_editor, $ctx->id, 'mod_assign',
         'intro', 0, array('subdirs'=>true), $moduleinstance->intro);
-$formdata->introeditor = array('text'=>$currentintro, 'format'=>$moduleinstance->introformat, 'itemid'=>$draftitemid_editor);
+$formdata['introeditor'] = array('text'=>$currentintro, 'format'=>$moduleinstance->introformat, 'itemid'=>$draftitemid_editor);
 
 //attachments
 $draftitemid_attachments = file_get_submitted_draft_itemid('introattachments');

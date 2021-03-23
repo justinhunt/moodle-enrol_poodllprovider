@@ -80,15 +80,19 @@ if ($mform->is_cancelled()) {
     $data->timemodified = time();
     $data->instance = $data->id;
     $data->coursemodule = $cm->id;
-   // $data->intro = $data->introeditor['text'];
-   // $data->introformat = $data->introeditor['format'];
+
+    //intro editor
+    $data->intro = file_save_draft_area_files($data->introeditor['itemid'], $modcontext->id,
+            'mod_assign', 'intro', 0,
+            array('subdirs'=>true), $data->introeditor['text']);
+    $data->introformat = $moduleinfo->introeditor['format'];
+    unset($data->introeditor);
+
     foreach ($moduleinstance as $key => $value) {
-        if(!isset($data->{$key}) && !in_array($key,['intro','introformat']) ){
+        if(!isset($data->{$key})){
             $data->{$key}=$value;
         }
     }
-
-    //$data = assign_process_files($data);
 
     //now update the db once we have saved files and stuff
     if (assign_update_instance($data,null)) {

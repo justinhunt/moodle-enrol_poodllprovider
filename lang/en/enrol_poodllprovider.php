@@ -96,3 +96,6 @@ $string['teachercanmanageactivities'] = 'Teacher can add/edit activities';
 $string['delete'] = 'Delete';
 $string['deleteconfirm'] = 'Do you really want to delete?';
 $string['addnewmodule'] = 'Add a new {$a}.';
+$string['view'] = 'View';
+$string['setup'] = 'Setup';
+$string['grading'] = 'Grading';

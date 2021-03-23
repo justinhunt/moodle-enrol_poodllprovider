@@ -43,9 +43,15 @@ $tabs = $row = $inactive = $activated = array();
 
 $row[] = new tabobject('view', "$CFG->wwwroot/mod/assign/view.php?id=$header->coursemoduleid", get_string('view', 'enrol_poodllprovider'),
         get_string('view', 'enrol_poodllprovider'));
+
 if (has_capability('mod/assign:addinstance', $header->context)) {
     $row[] = new tabobject('assign_setup', "$CFG->wwwroot/enrol/poodllprovider/assign/setup.php?id=$header->coursemoduleid",
             get_string('setup', 'enrol_poodllprovider'), get_string('setup', 'enrol_poodllprovider'));
+}
+
+if (has_capability('mod/assign:grade', $header->context)) {
+    $row[] = new tabobject('assign_grading', "$CFG->wwwroot/enrol/poodllprovider/assign/view.php?id=$header->coursemoduleid&action=grading",
+            get_string('grading', 'enrol_poodllprovider'), get_string('setup', 'enrol_poodllprovider'));
 }
 $tabs[] = $row;
 

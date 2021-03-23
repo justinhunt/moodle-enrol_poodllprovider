@@ -24,7 +24,7 @@
 
 
 namespace enrol_poodllprovider\local\output;
-//namespace them_boost\output;
+//namespace theme_boost\output;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -65,7 +65,18 @@ class mod_assign_renderer extends \mod_assign_renderer {
 
         $o .= $this->output->heading($heading);
         if (has_capability('mod/assign:addinstance',  $header->context)) {
-            //   $output .= $this->output->heading_with_help($activityname, 'overview', constants::M_COMPONENT);
+
+            $currenttab='view';
+            if(!empty($header->subpage)){
+                switch(strtolower($header->subpage)){
+                    case 'grading':
+                        $currenttab='grading';
+                        break;
+                    default:
+                        $currenttab='view';
+
+                }
+            }
 
             if (!empty($currenttab)) {
                 ob_start();

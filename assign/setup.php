@@ -80,10 +80,10 @@ if ($mform->is_cancelled()) {
     $data->timemodified = time();
     $data->instance = $data->id;
     $data->coursemodule = $cm->id;
-    $data->intro = $data->introeditor['text'];
-    $data->introformat = $data->introeditor['format'];
+   // $data->intro = $data->introeditor['text'];
+   // $data->introformat = $data->introeditor['format'];
     foreach ($moduleinstance as $key => $value) {
-        if(!isset($data->{$key})){
+        if(!isset($data->{$key}) && !in_array($key,['intro','introformat']) ){
             $data->{$key}=$value;
         }
     }
@@ -116,7 +116,7 @@ $formdata['introeditor'] = array('text'=>$currentintro, 'format'=>$moduleinstanc
 $draftitemid_attachments = file_get_submitted_draft_itemid('introattachments');
 file_prepare_draft_area($draftitemid_attachments, $ctx->id, 'mod_assign', ASSIGN_INTROATTACHMENT_FILEAREA,
         0, array('subdirs' => 0));
-$formdata['introattachments'] = $draftitemid;
+$formdata['introattachments'] = $draftitemid_attachments;
 
 //plugins
 $filerelatedvalues['introattachments'] = $draftitemid_attachments;

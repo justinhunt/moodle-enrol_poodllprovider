@@ -83,7 +83,7 @@ if ($mform->is_cancelled()) {
     //$data = assign_process_files($data);
 
     //now update the db once we have saved files and stuff
-    if (assign_update_instance($data)) {
+    if (assign_update_instance($data,null)) {
         redirect($redirecturl);
         exit;
     }

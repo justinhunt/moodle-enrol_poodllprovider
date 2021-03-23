@@ -95,11 +95,23 @@ if ($mform->is_cancelled()) {
     }
 }
 
-//if we got here we is loading up dat form
-//$moduleinstance = utils::prepare_file_and_json_stuff($moduleinstance,$modulecontext);
+//if we got here we are loading up data
+//attachments
+$ctx = context_module::instance($cm->id);
+$assignment = new assign($ctx, null, null);
+$assignment->set_course($course);
+
+$draftitemid = file_get_submitted_draft_itemid('introattachments');
+file_prepare_draft_area($draftitemid, $ctx->id, 'mod_assign', ASSIGN_INTROATTACHMENT_FILEAREA,
+        0, array('subdirs' => 0));
+$defaultvalues['introattachments'] = $draftitemid;
+
+$assignment->plugin_data_preprocessing($defaultvalues);
 
 $moduleinstance->n =$moduleinstance->id;
-$mform->set_data((array)$moduleinstance);
+$formdata = (array)$moduleinstance;
+$formdata['introattachments'] = $draftitemid;
+$mform->set_data($formdata);
 
 echo $renderer->setup_header($moduleinstance, $modulecontext, $id);
 $mform->display();

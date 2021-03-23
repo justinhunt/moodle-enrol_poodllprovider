@@ -80,6 +80,8 @@ if ($mform->is_cancelled()) {
     $data->timemodified = time();
     $data->instance = $data->id;
     $data->coursemodule = $cm->id;
+    $data->intro = $data->introeditor['text'];
+    $data->introformat = $data->introeditor['format'];
     foreach ($moduleinstance as $key => $value) {
         if(!isset($data->{$key})){
             $data->{$key}=$value;

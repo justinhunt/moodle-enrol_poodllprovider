@@ -82,7 +82,7 @@ if ($mform->is_cancelled()) {
     $data->coursemodule = $cm->id;
 
     //intro editor
-    $data->intro = file_save_draft_area_files($data->introeditor['itemid'], $modcontext->id,
+    $data->intro = file_save_draft_area_files($data->introeditor['itemid'], $modulecontext->id,
             'mod_assign', 'intro', 0,
             array('subdirs'=>true), $data->introeditor['text']);
     $data->introformat = $moduleinfo->introeditor['format'];

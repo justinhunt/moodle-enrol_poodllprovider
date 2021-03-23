@@ -37,9 +37,13 @@ $component='mod_assign';
 
 // Course module ID.
 $id = optional_param('id',0, PARAM_INT); // course_module ID, or
+$n = optional_param('n',0, PARAM_INT); // course_module ID, or
 
-
-list ($course, $cm) = get_course_and_cm_from_cmid($id, 'assign');
+if($n) {
+    list ($course, $cm) = get_course_and_cm_from_cmid($n, 'assign');
+}else{
+    list ($course, $cm) = get_course_and_cm_from_cmid($id, 'assign');
+}
 $moduleinstance = $DB->get_record($modname, array('id' => $cm->instance), '*', MUST_EXIST);
 
 
@@ -47,7 +51,7 @@ $modulecontext = context_module::instance($cm->id);
 require_capability('mod/assign:addinstance', $modulecontext);
 
 // Set page login data.
-$PAGE->set_url($CFG->dirroot  . '/enrol/poodllprovider/assign/setup.php',array('id'=>$id));
+$PAGE->set_url($CFG->dirroot  . '/enrol/poodllprovider/assign/setup.php',array('id'=>$cm->id));
 require_login($course, true, $cm);
 
 
@@ -73,7 +77,7 @@ if ($mform->is_cancelled()) {
 }else if ($data = $mform->get_data()) {
 
     $data->timemodified = time();
-    $data->id = $data->n;
+    //$data->id = $data->n;
     $data->coursemodule = $cm->id;
     //$data = assign_process_files($data);
 

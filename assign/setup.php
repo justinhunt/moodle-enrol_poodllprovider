@@ -63,7 +63,7 @@ $PAGE->set_pagelayout('course');
 // Render template and display page.
 $renderer = $PAGE->get_renderer($component);
 
-$mform = new \mod_assign\setupform(null,['context'=>$modulecontext, 'cmid'=>$cm->id]);
+$mform = new \enrol_poodllprovider\assign_setupform(null,['context'=>$modulecontext, 'cm'=>$cm, 'course'=>$course]);
 
 $redirecturl = new moodle_url('/mod/assign/view.php', array('id'=>$cm->id));
 //if the cancel button was pressed, we are out of here

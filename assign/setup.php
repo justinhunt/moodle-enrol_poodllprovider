@@ -27,6 +27,7 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->dirroot . '/mod/assign/mod_form.php');
 require_once($CFG->dirroot . '/mod/assign/locallib.php');
+require_once($CFG->dirroot . '/mod/assign/lib.php');
 
 
 
@@ -82,7 +83,7 @@ if ($mform->is_cancelled()) {
     //$data = assign_process_files($data);
 
     //now update the db once we have saved files and stuff
-    if ($DB->update_record($modname, $data)) {
+    if (assign_update_instance($data)) {
         redirect($redirecturl);
         exit;
     }

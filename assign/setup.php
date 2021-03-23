@@ -37,10 +37,10 @@ $component='mod_assign';
 
 // Course module ID.
 $id = optional_param('id',0, PARAM_INT); // course_module ID, or
-$n = optional_param('n',0, PARAM_INT); // course_module ID, or
+$cmid = optional_param('cmid',0, PARAM_INT); // course_module ID, or
 
-if($n) {
-    list ($course, $cm) = get_course_and_cm_from_cmid($n, 'assign');
+if($cmid) {
+    list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'assign');
 }else{
     list ($course, $cm) = get_course_and_cm_from_cmid($id, 'assign');
 }

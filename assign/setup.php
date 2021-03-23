@@ -78,7 +78,7 @@ if ($mform->is_cancelled()) {
 }else if ($data = $mform->get_data()) {
 
     $data->timemodified = time();
-    //$data->id = $data->n;
+    $data->id = $data->n;
     $data->coursemodule = $cm->id;
     //$data = assign_process_files($data);
 

@@ -134,10 +134,11 @@ class external extends \external_api {
 
             return \enrol_poodllprovider\helper::render_lti_tool_item($tool->id);
 
-            //if existing we want to update the name
+            //if existing we want to update the name, we already did that at submit_mod_edit_form
+            //so here we just return the new rendered item with new name to replace the old one
         }else{
-            //but I do not know how ... lets do this later.
-            //probably we need to fetch the tool and remove the old one and add the new one
+            $toolid= $params['itemnumber'];
+            return \enrol_poodllprovider\helper::render_lti_tool_item($toolid);
 
         }
         return '';
@@ -287,15 +288,18 @@ class external extends \external_api {
         if(in_array($module->name,$poodllshortforms)) {
             $mform = new \enrol_poodllprovider\shortmodform(null,null,'post','',null,true,$formdata);
             if ($fromform = $mform->get_data()) {
+                //if new
                 if(!empty($fromform->add)) {
                     $fromform = helper::fetch_extrafields($fromform, $course);
                     $fromform = add_moduleinfo($fromform, $course);
                     return $fromform->coursemodule;
+
+                    //if editing
                 }elseif(!empty($fromform->update)){
 
                     \core_course\output\course_module_name::update($fromform->update, $fromform->name);
                     \enrol_poodllprovider\helper::rename_lti_tool($fromform->update, $fromform->name);
-
+                    //$fromform->update is actually the cmid, which is coursemodule
                     return $fromform->update;
                 } else {
                     print_error('invaliddata');

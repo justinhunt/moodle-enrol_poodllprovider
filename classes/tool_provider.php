@@ -559,11 +559,14 @@ class tool_provider extends ToolProvider {
         } else if ($context->contextlevel == CONTEXT_MODULE) {
             //tool context
             role_assign($roleid, $user->id, $tool->contextid);
-            $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-            $coursecontext = \context_course::instance($course->id);
-            role_assign($roleid, $user->id, $coursecontext->id);
+
+            //had not been grade sync'ing till we did this, then non-did-this ones also grade sync'd
+            //commenting for noww
+            //$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+            //$coursecontext = \context_course::instance($course->id);
+            //role_assign($roleid, $user->id, $coursecontext->id);
         }
-        
+
 
 
         // Login user.

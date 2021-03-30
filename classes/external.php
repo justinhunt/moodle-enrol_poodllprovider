@@ -103,6 +103,7 @@ class external extends \external_api {
 
         $cmid = self::submit_mod_edit_form($data);
 
+        //if new we want to add the enrolment instance
         if (!$params['cmid']) {
             $contextmodule = \context_module::instance($cmid);
 
@@ -132,6 +133,11 @@ class external extends \external_api {
             $tool = $DB->get_record('enrol_pp_tools', ['enrolid' => $enrolid]);
 
             return \enrol_poodllprovider\helper::render_lti_tool_item($tool->id);
+
+            //if existing we want to update the name
+        }else{
+            //but I do not know how ... lets do this later.
+            //probably we need to fetch the tool and remove the old one and add the new one
 
         }
         return '';

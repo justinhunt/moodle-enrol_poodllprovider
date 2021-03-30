@@ -234,7 +234,7 @@ define([
         .then(function(data) {
             if (data !== '') {
                 //$('section.activity-list.sections.collapse.show .row.activity:last').after(data);
-                $('section.activity-list.sections.collapse.show .enrol_poodllprovider_activityitems').append(data);
+                $('section.activity-list.sections.collapse.show .enrol_poodllprovider_activityitems').prepend(data);
             }
         });
     };

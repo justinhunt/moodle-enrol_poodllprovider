@@ -525,7 +525,7 @@ function enrol_poodllprovider_output_fragment_ltimodule_form($args) {
  * @throws moodle_exception
  */
 function mod_shortform_output($args, $modname) {
-    global $CFG;
+    global $CFG, $DB;
 
     $args = (object) $args;
     $context = $args->context;
@@ -540,7 +540,9 @@ function mod_shortform_output($args, $modname) {
     $data->return = 0;
     $data->sr = $sectionreturn;
     if($cmid){
+        $instance = $instance = $DB->get_record($modname, array('id' => $cm->instance), '*', MUST_EXIST);
         $data->update = $cmid;
+        $data->name=$instance->name;
     }else{
         $data->add = $modname;
     }
@@ -599,7 +601,6 @@ function mod_form_output($args, $modname) {
     if (!empty($cmid)) {
         // Check the course module exists.
         $cm = get_coursemodule_from_id('', $cmid, 0, false, MUST_EXIST);
-
         list($cm, $contextcourse, $module, $data, $cw) = get_moduleinfo_data($cm, $course);
         $data->return = 0;
         $data->sr = $sectionreturn;

@@ -540,8 +540,8 @@ function mod_shortform_output($args, $modname) {
     $data->return = 0;
     $data->sr = $sectionreturn;
     if($cmid){
-        $cm = \context_module::instance($cmid);
-        $instance = $instance = $DB->get_record($modname, array('id' => $cm->instance), '*', MUST_EXIST);
+        $cm = get_coursemodule_from_id('', $cmid, 0, false, MUST_EXIST);
+        $instance = $DB->get_record($modname, array('id' => $cm->instance), '*', MUST_EXIST);
         $data->update = $cmid;
         $data->name=$instance->name;
     }else{

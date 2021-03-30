@@ -757,7 +757,7 @@ class helper {
                 $fromform->welcome_editor=['text'=>'Please read the following passage aloud.','format'=>0];
                 $fromform->feedback_editor=['text'=>'Thanks for reading. Please be patient until your attempt has been evaluated.','format'=>0];
                 $fromform->targetwpm=100;
-                $fromform->allowearlyexit=0;
+                $fromform->allowearlyexit=1;
                 $fromform->enablepreview=1;
                 $fromform->enableshadow=0;
                 $fromform->enablelandr=1;

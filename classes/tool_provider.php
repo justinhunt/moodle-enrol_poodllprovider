@@ -385,6 +385,7 @@ class tool_provider extends ToolProvider {
         if ($context->contextlevel == CONTEXT_MODULE) {
             $cm = get_coursemodule_from_id('', $context->instanceid, $this->tool->courseid, false, MUST_EXIST);
             $fdata['cmid'] = $cm->id;
+            $fdata['contextid'] = $context->id;
             $fdata['modname'] = $cm->modname;
             $fdata['icon'] = $OUTPUT->image_url('icon', $cm->modname);
         }

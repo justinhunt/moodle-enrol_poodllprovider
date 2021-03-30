@@ -239,7 +239,11 @@ class tool_provider extends ToolProvider {
             $fdata['itemnumber'] = $thetool->id;
             $fdata['name'] = $thetool->name;
 
-            $context = context::instance_by_id($thetool->contextid);
+            $context = context::instance_by_id($thetool->contextid,IGNORE_MISSING);
+
+            //if context is missing, it means it was deleted on the provider, the tool exists but the item has gone
+            if(!$context){continue;}
+
             if ($context->contextlevel == CONTEXT_MODULE) {
                 $cm = get_coursemodule_from_id('', $context->instanceid, $thetool->courseid, false,IGNORE_MISSING);
 

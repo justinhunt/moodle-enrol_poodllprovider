@@ -235,6 +235,9 @@ define([
         .then(function(data) {
             if (data !== '') {
                 if(that.data.cmid>0){
+                    //remove the form and replace the div with the whole template.
+                    //effectively a full replace
+                    $("div[data-toolid='" + that.data.itemnumber + "']").remove();
                     $("div[data-toolid='" + that.data.itemnumber + "']").replaceWith(data);
 
                 }else {

@@ -219,6 +219,7 @@ define([
 
         // Convert all the form elements values to a serialised string.
         var formData = this.modal.getRoot().find('form').serialize();
+        var that=this;
 
         Ajax.call([{
             methodname: 'enrol_poodllprovider_manage_course_module',
@@ -233,8 +234,13 @@ define([
         }])[0]
         .then(function(data) {
             if (data !== '') {
-                //$('section.activity-list.sections.collapse.show .row.activity:last').after(data);
-                $('section.activity-list.sections.collapse.show .enrol_poodllprovider_activityitems').append(data);
+                if(that.data.cmid>0){
+                    $("div[data-toolid='" + that.data.itemnumber + "']").replaceWith(data);
+
+                }else {
+                    //$('section.activity-list.sections.collapse.show .row.activity:last').after(data);
+                    $('section.activity-list.sections.collapse.show .enrol_poodllprovider_activityitems').append(data);
+                }
             }
         });
     };

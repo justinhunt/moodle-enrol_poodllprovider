@@ -75,6 +75,9 @@ class shortmodform extends \moodleform {
         $mform->addElement('hidden', 'add');
         $mform->setType('add', PARAM_TEXT);
 
+        $mform->addElement('hidden', 'update');
+        $mform->setType('update', PARAM_INT);
+
         $mform->addElement('hidden', 'return');
         $mform->setType('return', PARAM_INT);
 

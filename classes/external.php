@@ -294,6 +294,7 @@ class external extends \external_api {
                 }elseif(!empty($fromform->update)){
 
                     \core_course\output\course_module_name::update($fromform->update, $fromform->name);
+                    \enrol_poodllprovider\helper::rename_lti_tool($fromform->update, $fromform->name);
 
                     return $fromform->update;
                 } else {

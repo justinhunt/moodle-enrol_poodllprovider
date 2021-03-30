@@ -279,6 +279,34 @@ class helper {
     }
 
     /**
+     * Renames the LTI tool.
+     *
+     * @param int $toolid
+     * @return \stdClass the tool
+     */
+    public static function rename_lti_tool($cmid, $toolname) {
+        global $DB;
+
+
+        $modcontext = \context_module::instance($cmid);
+        // Ensure they can access this module.
+        require_capability('moodle/course:manageactivities', $modcontext);
+        $toolinstance = $DB->get_record('enrol_pp_tools', ['contextid' => $modcontext->id]);
+        if($toolinstance) {
+
+            $sql = "UPDATE {enrol} e INNER JOIN {enrol_pp_tools} elt ON e.id = elt.enrolid 
+                SET  e.name = :tname 
+                WHERE elt.id = :tid";
+
+            $DB->execute($sql, array('tname' => $toolname, 'tid' => $toolinstance->id));
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    /**
      * Returns the LTI tool.
      *
      * @param int $toolid

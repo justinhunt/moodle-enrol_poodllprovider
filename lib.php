@@ -539,7 +539,12 @@ function mod_shortform_output($args, $modname) {
     list($module, $contextcourse, $cw, $cm, $data) = prepare_new_moduleinfo_data($course, $modname, $section);
     $data->return = 0;
     $data->sr = $sectionreturn;
-    $data->add = $modname;
+    if($cmid){
+        $data->update = $cmid;
+    }else{
+        $data->add = $modname;
+    }
+
     $data->modulename=$modname;
     $data->course=$course->id;
 

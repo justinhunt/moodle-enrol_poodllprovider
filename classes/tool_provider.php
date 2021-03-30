@@ -518,8 +518,10 @@ class tool_provider extends ToolProvider {
             $courseid = $context->instanceid;
             $urltogo = new moodle_url('/course/view.php', ['id' => $courseid]);
 
+
         } else if ($context->contextlevel == CONTEXT_MODULE) {
             $cm = get_coursemodule_from_id(false, $context->instanceid, 0, false, MUST_EXIST);
+            $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
             $urltogo = new moodle_url('/mod/' . $cm->modname . '/view.php', ['id' => $cm->id]);
 
             // If we are a student in the course module context we do not want to display blocks.
@@ -550,7 +552,19 @@ class tool_provider extends ToolProvider {
 
         // Give the user the role in the given context.
         $roleid = $isinstructor ? $tool->roleinstructor : $tool->rolelearner;
-        role_assign($roleid, $user->id, $tool->contextid);
+        if ($context->contextlevel == CONTEXT_COURSE) {
+            //course context
+            role_assign($roleid, $user->id, $tool->contextid);
+
+        } else if ($context->contextlevel == CONTEXT_MODULE) {
+            //tool context
+            role_assign($roleid, $user->id, $tool->contextid);
+            $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+            $coursecontext = \context_course::instance($course->id);
+            role_assign($roleid, $user->id, $coursecontext->id);
+        }
+        
+
 
         // Login user.
         $sourceid = $this->user->ltiResultSourcedId;

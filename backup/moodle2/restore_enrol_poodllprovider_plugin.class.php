@@ -57,7 +57,7 @@ class restore_enrol_poodllprovider_plugin extends restore_enrol_plugin {
      *
      * @param array|stdClass $data
      */
-    public function process_enrol_poodllprovider_tool($data) {
+    public function process_enrol_pp_tool($data) {
         global $DB;
 
         $data = (object) $data;
@@ -84,7 +84,7 @@ class restore_enrol_poodllprovider_plugin extends restore_enrol_plugin {
      *
      * @param array|stdClass $data The data to insert as a comment
      */
-    public function process_enrol_poodllprovider_users($data) {
+    public function process_enrol_pp_users($data) {
         global $DB;
 
         $data = (object) $data;

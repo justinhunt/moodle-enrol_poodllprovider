@@ -97,6 +97,8 @@ class assign_setupform extends \moodleform {
         $mform->addElement('hidden','id');
         $mform->addElement('hidden','cmid');
         $mform->setDefault('cmid',$cm->id);
+        $mform->setType('id', PARAM_INT);
+        $mform->setType('cmid', PARAM_INT);
 
         $mform->addElement('header', 'general', get_string('general', 'form'));
 

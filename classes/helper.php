@@ -923,7 +923,7 @@ class helper {
 
             case 'assign':
 
-                  $fromform->introeditor = ['text'=> '','format'=> '1','itemid'=> 0];
+                  $fromform->introeditor = ['text'=> '<i>No topic has been set for this assignment.</i><br> <b>Teacher:</b> Please visit the Setup tab and complete the setup for this assignment.','format'=> '1','itemid'=> 0];
                   $fromform->showdescription= '0' ;
                   $fromform->introattachments= 0;
                   $fromform->allowsubmissionsfromdate= 0;

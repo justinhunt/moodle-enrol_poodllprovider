@@ -36,7 +36,9 @@ if (!isset($currenttab)) {
 }
 $component = 'mod_assign';
 if (!isset($course)) {
-    $course = $DB->get_record('course', array('id' => $moduleinstance->course));
+    //this seemed superfluous
+  //  $cm = get_coursemodule_from_id('assign', $header->coursemoduleid, 0, false, MUST_EXIST);
+  //  $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 }
 
 $tabs = $row = $inactive = $activated = array();

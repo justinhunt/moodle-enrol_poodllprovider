@@ -85,7 +85,7 @@ if ($mform->is_cancelled()) {
     $data->intro = file_save_draft_area_files($data->introeditor['itemid'], $modulecontext->id,
             'mod_assign', 'intro', 0,
             array('subdirs'=>true), $data->introeditor['text']);
-    $data->introformat = $moduleinfo->introeditor['format'];
+    //$data->introformat = $moduleinfo->introeditor['format'];
     unset($data->introeditor);
 
     foreach ($moduleinstance as $key => $value) {

@@ -806,6 +806,7 @@ class helper {
                 $fromform->stricttranscribe=0;
                 $fromform->activitylink=0;
                 $fromform->humanpostattempt=2;
+                $fromform->foriframe=1;
 
                 break;
 
@@ -826,6 +827,7 @@ class helper {
                 $fromform->completedmsg_editor=['text'=>'You have completed this activity. Feel free to go back and practice more!','format'=>0];
                 $fromform->modulename = 'wordcards';
                 $fromform->add ='wordcards';
+                $fromform->foriframe=1;
                 break;
 
             case 'solo':
@@ -874,6 +876,7 @@ class helper {
                 $fromform->bonus4='--';
 
                 $fromform->tips_editor=['text'=>'Speak simply and clearly.','format'=>0];
+                $fromform->foriframe=1;
                 break;
 
 
@@ -906,6 +909,7 @@ class helper {
                 $fromform->region='useast1';
                 $fromform->richtextprompt=0;
                 $fromform->activitylink=0;
+                $fromform->foriframe=1;
                 break;
 
             case 'englishcentral':
@@ -919,6 +923,7 @@ class helper {
                 $fromform->learngoal=20;
                 $fromform->speakgoal=10;
                 $fromform->studygoal=90;
+                $fromform->foriframe=1;
                 break;
 
             case 'assign':

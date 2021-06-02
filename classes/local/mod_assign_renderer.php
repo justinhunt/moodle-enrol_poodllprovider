@@ -58,12 +58,15 @@ class mod_assign_renderer extends \mod_assign_renderer {
         $this->page->set_title(get_string('pluginname', 'assign'));
         $this->page->set_heading($this->page->course->fullname);
 
-
+        //this for hiding headers and footers in the iframe
+        $this->page->set_pagelayout('popup');
 
         $o .= $this->output->header();
         $heading = format_string($header->assign->name, false, array('context' => $header->context));
 
+	     //comment next line to hide activity name in iframe
         $o .= $this->output->heading($heading);
+        
         if (has_capability('mod/assign:addinstance',  $header->context)) {
 
             $currenttab='view';

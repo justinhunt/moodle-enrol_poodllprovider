@@ -66,8 +66,8 @@ class mod_assign_renderer extends \mod_assign_renderer {
 
 	     //comment next line to hide activity name in iframe
         $o .= $this->output->heading($heading);
-        
-        if (has_capability('mod/assign:addinstance',  $header->context)) {
+
+        if (has_capability('mod/assign:viewgrades',  $header->context)) {
 
             $currenttab='view';
             if(!empty($header->subpage)){

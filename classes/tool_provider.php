@@ -277,7 +277,7 @@ class tool_provider extends ToolProvider {
         foreach (explode(',', $usemodtypes) as $modname) {
             $mod = new stdClass();
             $mod->modname = $modname;
-            if($modname=='mod_assign'){
+            if($modname=='assign'){
                 $mod->pluginname = get_string('mediaassignment', 'enrol_poodllprovider');
                 $mod->icon = $CFG->wwwroot . '/enrol/poodllprovider/pic/mediaassignment/icon.svg';
             }else {

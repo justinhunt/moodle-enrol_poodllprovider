@@ -183,7 +183,7 @@ class tool_provider extends ToolProvider {
     }
 
     protected function onContentItem() {
-        global $OUTPUT, $SESSION;
+        global $OUTPUT, $SESSION, $CFG;
 
         $this->verify_user();
 
@@ -277,8 +277,13 @@ class tool_provider extends ToolProvider {
         foreach (explode(',', $usemodtypes) as $modname) {
             $mod = new stdClass();
             $mod->modname = $modname;
-            $mod->pluginname = get_string('pluginname', $modname);
-            $mod->icon = $OUTPUT->image_url('icon', $modname);
+            if($modname=='mod_assign'){
+                $mod->pluginname = get_string('mediaassignment', 'enrol_poodllprovider');
+                $mod->icon = $CFG->wwwroot . '/enrol/poodllprovider/pic/mediaassignment/icon.svg';
+            }else {
+                $mod->pluginname = get_string('pluginname', $modname);
+                $mod->icon = $OUTPUT->image_url('icon', $modname);
+            }
             $mod->title = get_string('addnewmodule','enrol_poodllprovider', $mod->pluginname);
             $contentitemsdata->availablemods[] = $mod;
 

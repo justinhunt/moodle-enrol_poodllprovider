@@ -99,3 +99,4 @@ $string['addnewmodule'] = 'Add a new {$a}.';
 $string['view'] = 'View';
 $string['setup'] = 'Setup';
 $string['grading'] = 'Grading';
+$string['mediaassignment'] = 'Media Assignment';

@@ -197,10 +197,12 @@ class tool_provider extends ToolProvider {
         $coursecontext = \context_course::instance($this->tool->courseid);
 
         foreach($tools as $thetool) {
-            // Discard the current tool.
-            if ($thetool->id == $this->tool->id){
+            // We used to discard the current tool (the course itself) .. but now we use it
+            /*
+            if($thetool->id == $this->tool->id){
                 continue;
             }
+            */
 
             //first get the content_items Json that LTI expects
             //this is the payload that when the user selects from list of items is returned as the selected activity
@@ -244,6 +246,7 @@ class tool_provider extends ToolProvider {
             //if context is missing, it means it was deleted on the provider, the tool exists but the item has gone
             if(!$context){continue;}
 
+            //activity items: we store them by activity type
             if ($context->contextlevel == CONTEXT_MODULE) {
                 $cm = get_coursemodule_from_id('', $context->instanceid, $thetool->courseid, false,IGNORE_MISSING);
 
@@ -254,10 +257,12 @@ class tool_provider extends ToolProvider {
                 $fdata['modname'] = $cm->modname;
                 $fdata = (object) $fdata;
                 $formdataitems[$cm->modname][] = $fdata;
+
+                //The course item
             } else {
                 $fdata = (object) $fdata;
+                $fdata->icon = $CFG->wwwroot . '/enrol/poodllprovider/pix/paw.png';
                 $formdataitems['courses'][] = $fdata;
-                $formdataitems[] = $fdata;
             }
         }
 
@@ -298,6 +303,10 @@ class tool_provider extends ToolProvider {
 
             $contentitemsdata->sections[] = $section;
         }
+
+        //and add the course LTI item
+        $contentitemsdata->courses = $formdataitems['courses'];
+
 
         $fcontent = $OUTPUT->render_from_template('enrol_poodllprovider/contentitemspage', $contentitemsdata);
 

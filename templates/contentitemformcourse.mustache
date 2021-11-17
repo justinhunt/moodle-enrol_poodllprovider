@@ -1,0 +1,33 @@
+<h2 class="p-2">{{#str}}addfullcourse, enrol_poodllprovider{{/str}}</h2>
+<div class="row justify-content-center">
+    {{#courses}}
+        <form method="post" action="{{content_item_return_url}}" encType="application/x-www-form-urlencoded" id="poodllprovider_item_{{itemnumber}}" data-toolid="{{itemnumber}}">
+            <input type="hidden" name="content_items" value='{{{content_items}}}'/>
+            {{#data}}
+                <input type="hidden" name="data" value="{{ data }}"/>
+            {{/data}}
+            <input type="hidden" name="oauth_nonce" value="{{oauth_nonce}}" />
+            <input type="hidden" name="oauth_version" value="1.0" />
+            <input type="hidden" name="oauth_timestamp" value="{{oauth_timestamp}}" />
+            <input type="hidden" name="oauth_callback" value="{{oauth_callback}}" />
+            <input type="hidden" name="oauth_consumer_key" value="{{oauth_consumer_key}}" />
+            <input type="hidden" name="lti_version" value="{{lti_version}}"/>
+            <input type="hidden" name="lti_message_type" value="{{lti_message_type}}"/>
+            <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
+            <input type="hidden" name="oauth_signature" value="{{oauth_signature}}" />
+        </form>
+
+        <div aria-label="{{pluginname}}" class="col-sm-6 border-1 card m-1 bg-white">
+            <div class="card-body d-flex flex-column text-center px-1 py-4" data-region="chooser-option-info-container">
+                <a class="d-flex flex-column justify-content-between flex-fill" title="{{name}}"
+                   data-action="activity-select" data-itemnumber="{{itemnumber}}">
+
+                    <div class="optionicon mt-2 mb-1 icon-size-5 icon-no-margin">
+                        <img class="icon icon" alt="" aria-hidden="true" src="{{icon}}">
+                    </div>
+                    <div class="optionname clamp-2">{{name}}</div>
+                </a>
+            </div>
+        </div>
+    {{/courses}}
+</div>

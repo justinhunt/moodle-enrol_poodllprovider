@@ -21,20 +21,20 @@
     <div class="p-3">
         {{#teachercanmanage}}
             <button class="btn btn-primary float-right" data-action="activity-add" data-module="{{name}}" data-contextid="{{contextid}}" data-itemnumber="{{itemnumber}}">
-                <i class="fa fa-plus"></i> New Activity
+                <i class="fa fa-plus"></i> {{#str}}newactivity, enrol_poodllprovider{{/str}}
             </button>
         {{/teachercanmanage}}
         <h1>{{title}}</h1>
     </div>
     <div class="enrol_poodllprovider_activityitems">
     {{#items}}
-        {{> enrol_poodllprovider/contentitemform}}
+        {{> enrol_poodllprovider/contentitemformactivity}}
     {{/items}}
     </div>
 
     <div class="footer p-2 mt-3">
         <button class="btn btn-primary float-right" data-action="main-menu" data-module="{{name}}">
-            <i class="fa fa-bars"></i> Menu
+            <i class="fa fa-bars"></i> {{#str}}menu, enrol_poodllprovider{{/str}}
         </button>
     </div>
 </section>

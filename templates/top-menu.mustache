@@ -18,7 +18,7 @@
     @template enrol_poodllprovider/top-menu
 }}
 <section id="top-menu" class="sections">
-    <h1 class="p-2">What do you want to add?</h1>
+    <h2 class="p-2">{{#str}}addbyactivity, enrol_poodllprovider{{/str}}</h2>
     <div class="row justify-content-center">
         {{#availablemods}}
             <div aria-label="{{pluginname}}" class="col-sm-3 border-1 card m-1 bg-white">
@@ -36,6 +36,8 @@
             </div>
         {{/availablemods}}
     </div>
+    {{> enrol_poodllprovider/contentitemformcourse}}
+
 </section>
 
 <!--

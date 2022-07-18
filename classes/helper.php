@@ -388,7 +388,7 @@ class helper {
 
         $data = $toolprovider->get_lti_tool_data();
 
-        return $OUTPUT->render_from_template('enrol_poodllprovider/contentitemform', $data);
+        return $OUTPUT->render_from_template('enrol_poodllprovider/contentitemformactivity', $data);
     }
 
     /**

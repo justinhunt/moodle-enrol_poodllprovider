@@ -113,7 +113,11 @@ class enrol_poodllprovider_plugin extends enrol_plugin {
         $data->timemodified = $data->timecreated;
         foreach ($fields as $field => $value) {
             if($field=='modtypes') {
-                $data->$field = implode(',',$value);
+                if(is_array($value)) {
+                    $data->$field = implode(',', $value);
+                }else{
+                    $data->$field = $value;
+                }
             }else {
                 $data->$field = $value;
             }

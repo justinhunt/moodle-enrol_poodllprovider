@@ -94,4 +94,10 @@ if ($ADMIN->fulltree) {
             'enrol_poodllprovider/teachercanmanageactivities',
             get_string('teachercanmanageactivities', 'enrol_poodllprovider'), '', 1)
     );
+
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'enrol_poodllprovider/assignsetuptab',
+            get_string('Show assign setup tab'), '', 0)
+    );
 }

@@ -29,7 +29,7 @@ namespace enrol_poodllprovider\local\output;
 defined('MOODLE_INTERNAL') || die();
 
 // Be sure to include the H5P renderer so it can be extended
-require_once($CFG->dirroot . '/mod/assign/renderer.php');
+//require_once($CFG->dirroot . '/mod/assign/renderer.php');
 
 /**
  * A custom renderer class that extends the assign module renderer
@@ -38,7 +38,7 @@ require_once($CFG->dirroot . '/mod/assign/renderer.php');
  * @copyright 2021 Poodll {@link http://www.poodll.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_assign_renderer extends \mod_assign_renderer {
+class mod_assign_renderer extends \mod_assign\output\renderer {
 
     /**
      * Render the header.
@@ -48,6 +48,10 @@ class mod_assign_renderer extends \mod_assign_renderer {
      */
     public function render_assign_header($header) {
         global $CFG;
+
+        if(!get_config('enrol_poodllprovider','assignsetuptab')){
+            return parent::render_assign_header($header);
+        }
 
         $o = '';
 
@@ -87,7 +91,6 @@ class mod_assign_renderer extends \mod_assign_renderer {
                 $o .= ob_get_contents();
                 ob_end_clean();
             }
-
         }
 
         if ($header->preface) {

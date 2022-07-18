@@ -98,6 +98,6 @@ if ($ADMIN->fulltree) {
     $settings->add(
         new admin_setting_configcheckbox(
             'enrol_poodllprovider/assignsetuptab',
-            get_string('Show assign setup tab'), '', 0)
+          'Show assign setup tab', '', 0)
     );
 }

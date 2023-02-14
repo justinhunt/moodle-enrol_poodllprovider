@@ -926,6 +926,11 @@ class helper {
                 $fromform->foriframe=0;
                 break;
 
+            case 'page':
+                $fromform->page=['text'=> 'Page Text','format'=> '1','itemid'=> 0];
+                $fromform->display =get_config('page','display');
+                break;
+
             case 'assign':
 
                   $fromform->introeditor = ['text'=> '<i>No topic has been set for this assignment.</i><br> <b>Teacher:</b> Please visit the Setup tab and complete the setup for this assignment.','format'=> '1','itemid'=> 0];
